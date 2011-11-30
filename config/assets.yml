@@ -1,0 +1,10 @@
+embed_assets: off
+
+javascripts:
+  mksoft:
+    - public/libs/*.js
+    - public/js/**/*.js
+
+stylesheets:
+  mksoft:
+    - public/styles/**/*.css
