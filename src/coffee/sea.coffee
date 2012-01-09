@@ -1,0 +1,3 @@
+class MK.Sea
+
+  initialize: ->

@@ -1,0 +1,3 @@
+class MK.Heaven
+
+  initialize: ->

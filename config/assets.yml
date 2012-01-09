@@ -1,9 +1,17 @@
 embed_assets: off
+package_assets: off
 
 javascripts:
   mksoft:
-    - public/libs/*.js
-    - public/js/**/*.js
+    - public/libs/underscore.js
+    - public/libs/jquery.js
+    - public/libs/backbone.js
+    - public/scripts/app.js
+    - public/scripts/world.js
+    - public/scripts/sea.js
+    - public/scripts/wave.js
+    - public/scripts/heaven.js
+    - public/scripts/cloud.js
 
 stylesheets:
   mksoft:

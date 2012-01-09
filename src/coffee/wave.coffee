@@ -1,0 +1,3 @@
+class MK.Wave
+
+  initialize: ->
