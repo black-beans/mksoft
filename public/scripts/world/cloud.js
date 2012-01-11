@@ -58,7 +58,6 @@
     function Cloud(sky, pos) {
       this.sky = sky;
       this.pos = pos;
-      this.update = __bind(this.update, this);
       this.move = __bind(this.move, this);
       this.nr = Math.floor(Math.random() * World.Cloud.clouds.length);
       this.el = $('<div>');
@@ -75,17 +74,12 @@
         '-o-transform': "scale(" + this.speed + ")",
         '-ms-transform': "scale(" + this.speed + ")"
       });
-      this.update();
       this.sky.el.append(this.el);
     }
 
     Cloud.prototype.move = function() {
       this.x = this.x + this.speed;
       if (this.sky.width < this.x) this.x = this.el.width() * -1;
-      return this.update();
-    };
-
-    Cloud.prototype.update = function() {
       this.el.css('z-index', Math.floor(this.sky.height - this.y));
       this.el.css('top', this.y);
       return this.el.css('left', this.x);

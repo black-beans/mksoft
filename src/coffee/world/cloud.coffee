@@ -36,8 +36,6 @@ class World.Cloud
       '-o-transform'     : "scale(#{ @speed })"
       '-ms-transform'    : "scale(#{ @speed })"
 
-    @update()
-
     @sky.el.append @el
 
   # Move the cloud
@@ -48,11 +46,6 @@ class World.Cloud
     if @sky.width < @x
       @x = @el.width() * -1
 
-    @update()
-
-  # Update cloud attribute to the dom
-  #
-  update: =>
     @el.css 'z-index', Math.floor(@sky.height - @y)
     @el.css 'top', @y
     @el.css 'left', @x

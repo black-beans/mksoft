@@ -9341,7 +9341,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     function Sea() {
       this.move = __bind(this.move, this);
-      this.updateSize = __bind(this.updateSize, this);
+      this.update = __bind(this.update, this);
       var pos, _ref;
       this.swell = Math.floor(Math.random() * 2) + 1;
       this.el = $('<div>');
@@ -9349,20 +9349,30 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       this.el.css('overflow', 'hidden');
       this.el.css('bottom', 0);
       this.el.css('left', 0);
-      $(window).bind('resize', this.updateSize);
-      this.updateSize();
+      $(window).bind('resize', this.update);
+      this.update();
       this.waves = [];
-      for (pos = 1, _ref = World.Sea.waves; 1 <= _ref ? pos <= _ref : pos >= _ref; 1 <= _ref ? pos++ : pos--) {
+      for (pos = 1, _ref = World.Sea.waves; 1 <= _ref ? pos < _ref : pos > _ref; 1 <= _ref ? pos++ : pos--) {
         this.waves.push(new World.Wave(this, pos));
       }
     }
 
-    Sea.prototype.updateSize = function() {
+    Sea.prototype.update = function() {
+      var wave, _i, _len, _ref, _results;
       this.width = $(window).width();
       this.height = $(window).height() / 4;
-      if (this.height > 300) this.height = 300;
+      if (this.height > 200) this.height = 200;
       this.el.css('width', this.width);
-      return this.el.css('height', this.height);
+      this.el.css('height', this.height);
+      if (this.waves) {
+        _ref = this.waves;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          wave = _ref[_i];
+          _results.push(wave.el.css('width', this.sea.width + 1000));
+        }
+        return _results;
+      }
     };
 
     Sea.prototype.move = function() {
@@ -9390,10 +9400,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     function Wave(sea, pos) {
       this.sea = sea;
       this.pos = pos;
-      this.update = __bind(this.update, this);
       this.move = __bind(this.move, this);
       this.x = -500 + Math.floor(Math.random() * 250) + 1;
-      this.y = 100 + this.pos * 20;
+      this.y = this.pos * 20;
       this.swellXDeg = Math.floor(Math.random() * 360) + 1;
       this.swellYDeg = Math.floor(Math.random() * 360) + 1;
       this.el = $("<div>");
@@ -9402,22 +9411,17 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       this.el.css('opacity', 100 / (100 + (10 * (World.Sea.waves - this.pos))));
       this.el.css('z-index', World.Sea.waves - this.pos);
       this.el.css('height', 200);
-      this.update();
+      this.el.css('width', this.sea.width + 1000);
       this.sea.el.append(this.el);
     }
 
     Wave.prototype.move = function() {
-      this.swellXDeg = this.swellXDeg + this.sea.swell;
+      this.swellXDeg = this.swellXDeg + this.sea.swell * 3;
       if (this.swellXDeg > 360) this.swellXDeg = 0;
-      this.swellYDeg = this.swellYDeg + this.sea.swell;
+      this.swellYDeg = this.swellYDeg + this.sea.swell * 3;
       if (this.swellYDeg > 360) this.swellYDeg = 0;
-      return this.update();
-    };
-
-    Wave.prototype.update = function() {
       this.el.css('left', this.x + Math.sin(Trig.Util.deg2rad(this.swellXDeg)) * 5 * this.sea.swell);
-      this.el.css('top', this.y + Math.sin(Trig.Util.deg2rad(this.swellYDeg)) * 5 * this.sea.swell);
-      return this.el.css('width', this.sea.width + 1000);
+      return this.el.css('top', this.y + Math.sin(Trig.Util.deg2rad(this.swellYDeg)) * 5 * this.sea.swell);
     };
 
     return Wave;
@@ -9433,7 +9437,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     function Sky() {
       this.move = __bind(this.move, this);
-      this.updateSize = __bind(this.updateSize, this);
+      this.update = __bind(this.update, this);
       var pos;
       this.el = $('<div>');
       this.el.css('position', 'absolute');
@@ -9441,15 +9445,15 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       this.el.css('overflow-y', 'visible');
       this.el.css('top', 0);
       this.el.css('left', 0);
-      $(window).bind('resize', this.updateSize);
-      this.updateSize();
+      $(window).bind('resize', this.update);
+      this.update();
       this.clouds = [];
       for (pos = 1; pos <= 20; pos++) {
         this.clouds.push(new World.Cloud(this, pos));
       }
     }
 
-    Sky.prototype.updateSize = function() {
+    Sky.prototype.update = function() {
       var cloud, oldHeight, _i, _len, _ref;
       this.width = $(window).width();
       oldHeight = this.height;
@@ -9542,7 +9546,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     function Cloud(sky, pos) {
       this.sky = sky;
       this.pos = pos;
-      this.update = __bind(this.update, this);
       this.move = __bind(this.move, this);
       this.nr = Math.floor(Math.random() * World.Cloud.clouds.length);
       this.el = $('<div>');
@@ -9559,17 +9562,12 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
         '-o-transform': "scale(" + this.speed + ")",
         '-ms-transform': "scale(" + this.speed + ")"
       });
-      this.update();
       this.sky.el.append(this.el);
     }
 
     Cloud.prototype.move = function() {
       this.x = this.x + this.speed;
       if (this.sky.width < this.x) this.x = this.el.width() * -1;
-      return this.update();
-    };
-
-    Cloud.prototype.update = function() {
       this.el.css('z-index', Math.floor(this.sky.height - this.y));
       this.el.css('top', this.y);
       return this.el.css('left', this.x);

@@ -10,15 +10,15 @@ class World.Sky
     @el.css 'top', 0
     @el.css 'left', 0
 
-    $(window).bind 'resize', @updateSize
-    @updateSize()
+    $(window).bind 'resize', @update
+    @update()
 
     @clouds = []
     @clouds.push(new World.Cloud(@, pos)) for pos in [1..20]
 
   # Calculate the new sky size
   #
-  updateSize: =>
+  update: =>
     @width  = $(window).width()
 
     oldHeight = @height

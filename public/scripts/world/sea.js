@@ -7,7 +7,7 @@
 
     function Sea() {
       this.move = __bind(this.move, this);
-      this.updateSize = __bind(this.updateSize, this);
+      this.update = __bind(this.update, this);
       var pos, _ref;
       this.swell = Math.floor(Math.random() * 2) + 1;
       this.el = $('<div>');
@@ -15,20 +15,30 @@
       this.el.css('overflow', 'hidden');
       this.el.css('bottom', 0);
       this.el.css('left', 0);
-      $(window).bind('resize', this.updateSize);
-      this.updateSize();
+      $(window).bind('resize', this.update);
+      this.update();
       this.waves = [];
-      for (pos = 1, _ref = World.Sea.waves; 1 <= _ref ? pos <= _ref : pos >= _ref; 1 <= _ref ? pos++ : pos--) {
+      for (pos = 1, _ref = World.Sea.waves; 1 <= _ref ? pos < _ref : pos > _ref; 1 <= _ref ? pos++ : pos--) {
         this.waves.push(new World.Wave(this, pos));
       }
     }
 
-    Sea.prototype.updateSize = function() {
+    Sea.prototype.update = function() {
+      var wave, _i, _len, _ref, _results;
       this.width = $(window).width();
       this.height = $(window).height() / 4;
-      if (this.height > 300) this.height = 300;
+      if (this.height > 200) this.height = 200;
       this.el.css('width', this.width);
-      return this.el.css('height', this.height);
+      this.el.css('height', this.height);
+      if (this.waves) {
+        _ref = this.waves;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          wave = _ref[_i];
+          _results.push(wave.el.css('width', this.sea.width + 1000));
+        }
+        return _results;
+      }
     };
 
     Sea.prototype.move = function() {

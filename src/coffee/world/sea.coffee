@@ -13,21 +13,24 @@ class World.Sea
     @el.css 'bottom', 0
     @el.css 'left', 0
 
-    $(window).bind 'resize', @updateSize
-    @updateSize()
+    $(window).bind 'resize', @update
+    @update()
 
     @waves = []
-    @waves.push(new World.Wave(@, pos)) for pos in [1..World.Sea.waves]
+    @waves.push(new World.Wave(@, pos)) for pos in [1...World.Sea.waves]
 
   # Calculate the new sky size
   #
-  updateSize: =>
+  update: =>
     @width  = $(window).width()
     @height = $(window).height() / 4
-    @height = 300 if @height > 300
+    @height = 200 if @height > 200
 
     @el.css 'width', @width
     @el.css 'height', @height
+
+    if @waves
+      wave.el.css('width', @sea.width + 1000) for wave in @waves
 
   # Move the sea
   #

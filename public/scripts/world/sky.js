@@ -5,7 +5,7 @@
 
     function Sky() {
       this.move = __bind(this.move, this);
-      this.updateSize = __bind(this.updateSize, this);
+      this.update = __bind(this.update, this);
       var pos;
       this.el = $('<div>');
       this.el.css('position', 'absolute');
@@ -13,15 +13,15 @@
       this.el.css('overflow-y', 'visible');
       this.el.css('top', 0);
       this.el.css('left', 0);
-      $(window).bind('resize', this.updateSize);
-      this.updateSize();
+      $(window).bind('resize', this.update);
+      this.update();
       this.clouds = [];
       for (pos = 1; pos <= 20; pos++) {
         this.clouds.push(new World.Cloud(this, pos));
       }
     }
 
-    Sky.prototype.updateSize = function() {
+    Sky.prototype.update = function() {
       var cloud, oldHeight, _i, _len, _ref;
       this.width = $(window).width();
       oldHeight = this.height;
