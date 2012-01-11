@@ -1,14 +1,15 @@
-class MK.Sea
+class World.Sea
+
+  @waves: 5
 
   # Construct the sea
   #
   constructor: ->
-    @swell = Math.floor(Math.random() * 3) + 1
+    @swell = Math.floor(Math.random() * 2) + 1
 
     @el = $('<div>')
     @el.css 'position', 'absolute'
-    @el.css 'overflow-x', 'hidden'
-    @el.css 'overflow-y', 'visible'
+    @el.css 'overflow', 'hidden'
     @el.css 'bottom', 0
     @el.css 'left', 0
 
@@ -16,13 +17,14 @@ class MK.Sea
     @updateSize()
 
     @waves = []
-    @waves.push(new MK.Wave(@, pos)) for pos in [1..8]
+    @waves.push(new World.Wave(@, pos)) for pos in [1..World.Sea.waves]
 
   # Calculate the new sky size
   #
   updateSize: =>
     @width  = $(window).width()
     @height = $(window).height() / 4
+    @height = 300 if @height > 300
 
     @el.css 'width', @width
     @el.css 'height', @height

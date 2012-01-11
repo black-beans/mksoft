@@ -1,5 +1,6 @@
-window.MK = {}
+window.Trig = {}
+window.World = {}
 
 $(->
-  world = new MK.World()
+  earth = new World.Earth()
 )

@@ -1,4 +1,4 @@
-class MK.Sky
+class World.Sky
 
   # Construct the sky
   #
@@ -14,7 +14,7 @@ class MK.Sky
     @updateSize()
 
     @clouds = []
-    @clouds.push(new MK.Cloud(@, pos)) for pos in [1..20]
+    @clouds.push(new World.Cloud(@, pos)) for pos in [1..20]
 
   # Calculate the new sky size
   #

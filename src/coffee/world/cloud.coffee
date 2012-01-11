@@ -1,4 +1,4 @@
-class MK.Cloud
+class World.Cloud
 
   @clouds: [
     { file: 'cloud_1.png', width: 500, height: 131 }
@@ -18,19 +18,18 @@ class MK.Cloud
   # Construct a cloud
   #
   constructor: (@sky, @pos) ->
-    @nr = Math.floor(Math.random() * MK.Cloud.clouds.length)
+    @nr = Math.floor(Math.random() * World.Cloud.clouds.length)
 
     @el = $('<div>')
-    @el.css 'background', "transparent url(images/#{ MK.Cloud.clouds[@nr].file }) left bottom repeat-x"
+    @el.css 'background', "transparent url(images/#{ World.Cloud.clouds[@nr].file }) left bottom repeat-x"
     @el.css 'position', 'absolute'
-    @el.css 'width', MK.Cloud.clouds[@nr].width
-    @el.css 'height', MK.Cloud.clouds[@nr].height
+    @el.css 'width', World.Cloud.clouds[@nr].width
+    @el.css 'height', World.Cloud.clouds[@nr].height
 
     @x = Math.floor(Math.random() * @sky.width) + 1
     @y = Math.floor(Math.random() * (@sky.height - @el.height())) + 1
     @speed = -1 / @sky.height * (@y - @sky.height)
 
-    console.log "scale(#{ @speed }, #{ @speed })"
     @el.css
       '-webkit-transform': "scale(#{ @speed })"
       '-moz-transform'   : "scale(#{ @speed })"

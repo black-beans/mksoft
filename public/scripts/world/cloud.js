@@ -1,7 +1,7 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  MK.Cloud = (function() {
+  World.Cloud = (function() {
 
     Cloud.clouds = [
       {
@@ -60,16 +60,15 @@
       this.pos = pos;
       this.update = __bind(this.update, this);
       this.move = __bind(this.move, this);
-      this.nr = Math.floor(Math.random() * MK.Cloud.clouds.length);
+      this.nr = Math.floor(Math.random() * World.Cloud.clouds.length);
       this.el = $('<div>');
-      this.el.css('background', "transparent url(images/" + MK.Cloud.clouds[this.nr].file + ") left bottom repeat-x");
+      this.el.css('background', "transparent url(images/" + World.Cloud.clouds[this.nr].file + ") left bottom repeat-x");
       this.el.css('position', 'absolute');
-      this.el.css('width', MK.Cloud.clouds[this.nr].width);
-      this.el.css('height', MK.Cloud.clouds[this.nr].height);
+      this.el.css('width', World.Cloud.clouds[this.nr].width);
+      this.el.css('height', World.Cloud.clouds[this.nr].height);
       this.x = Math.floor(Math.random() * this.sky.width) + 1;
       this.y = Math.floor(Math.random() * (this.sky.height - this.el.height())) + 1;
       this.speed = -1 / this.sky.height * (this.y - this.sky.height);
-      console.log("scale(" + this.speed + ", " + this.speed + ")");
       this.el.css({
         '-webkit-transform': "scale(" + this.speed + ")",
         '-moz-transform': "scale(" + this.speed + ")",

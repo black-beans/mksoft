@@ -1,30 +1,32 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  MK.Sea = (function() {
+  World.Sea = (function() {
+
+    Sea.waves = 5;
 
     function Sea() {
       this.move = __bind(this.move, this);
       this.updateSize = __bind(this.updateSize, this);
-      var pos;
-      this.swell = Math.floor(Math.random() * 3) + 1;
+      var pos, _ref;
+      this.swell = Math.floor(Math.random() * 2) + 1;
       this.el = $('<div>');
       this.el.css('position', 'absolute');
-      this.el.css('overflow-x', 'hidden');
-      this.el.css('overflow-y', 'visible');
+      this.el.css('overflow', 'hidden');
       this.el.css('bottom', 0);
       this.el.css('left', 0);
       $(window).bind('resize', this.updateSize);
       this.updateSize();
       this.waves = [];
-      for (pos = 1; pos <= 8; pos++) {
-        this.waves.push(new MK.Wave(this, pos));
+      for (pos = 1, _ref = World.Sea.waves; 1 <= _ref ? pos <= _ref : pos >= _ref; 1 <= _ref ? pos++ : pos--) {
+        this.waves.push(new World.Wave(this, pos));
       }
     }
 
     Sea.prototype.updateSize = function() {
       this.width = $(window).width();
       this.height = $(window).height() / 4;
+      if (this.height > 300) this.height = 300;
       this.el.css('width', this.width);
       return this.el.css('height', this.height);
     };

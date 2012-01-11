@@ -9267,34 +9267,32 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 (function() {
 
-  window.MK = {};
+  window.Trig = {};
+
+  window.World = {};
 
   $(function() {
-    var world;
-    return world = new MK.World();
+    var earth;
+    return earth = new World.Earth();
   });
 
 }).call(this);
 
 (function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  MK.World = (function() {
+  Trig.Util = (function() {
 
-    function World() {
-      this.move = __bind(this.move, this);      this.sea = new MK.Sea();
-      this.sky = new MK.Sky();
-      $('body').append(this.sea.el);
-      $('body').append(this.sky.el);
-      setInterval(this.move, 10);
-    }
+    function Util() {}
 
-    World.prototype.move = function() {
-      this.sea.move();
-      return this.sky.move();
+    Util.rad2deg = function(rad) {
+      return rad * 180 / Math.PI;
     };
 
-    return World;
+    Util.deg2rad = function(deg) {
+      return deg * Math.PI / 180;
+    };
+
+    return Util;
 
   })();
 
@@ -9303,30 +9301,56 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  MK.Sea = (function() {
+  World.Earth = (function() {
+
+    function Earth() {
+      this.move = __bind(this.move, this);      this.sea = new World.Sea();
+      this.sky = new World.Sky();
+      $('body').append(this.sea.el);
+      $('body').append(this.sky.el);
+      setInterval(this.move, 10);
+    }
+
+    Earth.prototype.move = function() {
+      this.sea.move();
+      return this.sky.move();
+    };
+
+    return Earth;
+
+  })();
+
+}).call(this);
+
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  World.Sea = (function() {
+
+    Sea.waves = 5;
 
     function Sea() {
       this.move = __bind(this.move, this);
       this.updateSize = __bind(this.updateSize, this);
-      var pos;
-      this.swell = Math.floor(Math.random() * 3) + 1;
+      var pos, _ref;
+      this.swell = Math.floor(Math.random() * 2) + 1;
       this.el = $('<div>');
       this.el.css('position', 'absolute');
-      this.el.css('overflow-x', 'hidden');
-      this.el.css('overflow-y', 'visible');
+      this.el.css('overflow', 'hidden');
       this.el.css('bottom', 0);
       this.el.css('left', 0);
       $(window).bind('resize', this.updateSize);
       this.updateSize();
       this.waves = [];
-      for (pos = 1; pos <= 8; pos++) {
-        this.waves.push(new MK.Wave(this, pos));
+      for (pos = 1, _ref = World.Sea.waves; 1 <= _ref ? pos <= _ref : pos >= _ref; 1 <= _ref ? pos++ : pos--) {
+        this.waves.push(new World.Wave(this, pos));
       }
     }
 
     Sea.prototype.updateSize = function() {
       this.width = $(window).width();
       this.height = $(window).height() / 4;
+      if (this.height > 300) this.height = 300;
       this.el.css('width', this.width);
       return this.el.css('height', this.height);
     };
@@ -9351,33 +9375,39 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  MK.Wave = (function() {
+  World.Wave = (function() {
 
     function Wave(sea, pos) {
       this.sea = sea;
       this.pos = pos;
       this.update = __bind(this.update, this);
       this.move = __bind(this.move, this);
-      this.x = 0 + (this.pos - 1) * 30;
-      this.y = 0 + (this.pos - 1) * 10;
+      this.x = -500 + Math.floor(Math.random() * 250) + 1;
+      this.y = 100 + this.pos * 20;
+      this.swellXDeg = Math.floor(Math.random() * 360) + 1;
+      this.swellYDeg = Math.floor(Math.random() * 360) + 1;
       this.el = $("<div>");
-      this.el.css('background', "transparent url(images/wave_" + this.sea.swell + ".png) left bottom repeat-x");
+      this.el.css('background', "transparent url(images/wave_" + this.sea.swell + ".png) left top repeat-x");
       this.el.css('position', 'absolute');
-      this.el.css('opacity', 100 / (100 + (5 * this.pos)));
-      this.el.css('z-index', 1000 - this.pos);
+      this.el.css('opacity', 100 / (100 + (10 * (World.Sea.waves - this.pos))));
+      this.el.css('z-index', World.Sea.waves - this.pos);
+      this.el.css('height', 200);
       this.update();
       this.sea.el.append(this.el);
     }
 
     Wave.prototype.move = function() {
+      this.swellXDeg = this.swellXDeg + this.sea.swell;
+      if (this.swellXDeg > 360) this.swellXDeg = 0;
+      this.swellYDeg = this.swellYDeg + this.sea.swell;
+      if (this.swellYDeg > 360) this.swellYDeg = 0;
       return this.update();
     };
 
     Wave.prototype.update = function() {
-      this.el.css('left', -this.x);
-      this.el.css('bottom', this.y);
-      this.el.css('height', this.sea.height);
-      return this.el.css('width', this.sea.width * 1.5);
+      this.el.css('left', this.x + Math.sin(Trig.Util.deg2rad(this.swellXDeg)) * 5 * this.sea.swell);
+      this.el.css('top', this.y + Math.sin(Trig.Util.deg2rad(this.swellYDeg)) * 5 * this.sea.swell);
+      return this.el.css('width', this.sea.width + 1000);
     };
 
     return Wave;
@@ -9389,7 +9419,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  MK.Sky = (function() {
+  World.Sky = (function() {
 
     function Sky() {
       this.move = __bind(this.move, this);
@@ -9405,7 +9435,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       this.updateSize();
       this.clouds = [];
       for (pos = 1; pos <= 20; pos++) {
-        this.clouds.push(new MK.Cloud(this, pos));
+        this.clouds.push(new World.Cloud(this, pos));
       }
     }
 
@@ -9445,7 +9475,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  MK.Cloud = (function() {
+  World.Cloud = (function() {
 
     Cloud.clouds = [
       {
@@ -9504,16 +9534,15 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       this.pos = pos;
       this.update = __bind(this.update, this);
       this.move = __bind(this.move, this);
-      this.nr = Math.floor(Math.random() * MK.Cloud.clouds.length);
+      this.nr = Math.floor(Math.random() * World.Cloud.clouds.length);
       this.el = $('<div>');
-      this.el.css('background', "transparent url(images/" + MK.Cloud.clouds[this.nr].file + ") left bottom repeat-x");
+      this.el.css('background', "transparent url(images/" + World.Cloud.clouds[this.nr].file + ") left bottom repeat-x");
       this.el.css('position', 'absolute');
-      this.el.css('width', MK.Cloud.clouds[this.nr].width);
-      this.el.css('height', MK.Cloud.clouds[this.nr].height);
+      this.el.css('width', World.Cloud.clouds[this.nr].width);
+      this.el.css('height', World.Cloud.clouds[this.nr].height);
       this.x = Math.floor(Math.random() * this.sky.width) + 1;
       this.y = Math.floor(Math.random() * (this.sky.height - this.el.height())) + 1;
       this.speed = -1 / this.sky.height * (this.y - this.sky.height);
-      console.log("scale(" + this.speed + ", " + this.speed + ")");
       this.el.css({
         '-webkit-transform': "scale(" + this.speed + ")",
         '-moz-transform': "scale(" + this.speed + ")",

@@ -5,7 +5,8 @@ javascripts:
   mksoft:
     - public/libs/jquery.js
     - public/scripts/app.js
-    - public/scripts/world/world.js
+    - public/scripts/trig/util.js
+    - public/scripts/world/earth.js
     - public/scripts/world/sea.js
     - public/scripts/world/wave.js
     - public/scripts/world/sky.js

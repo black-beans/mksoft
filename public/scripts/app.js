@@ -1,10 +1,12 @@
 (function() {
 
-  window.MK = {};
+  window.Trig = {};
+
+  window.World = {};
 
   $(function() {
-    var world;
-    return world = new MK.World();
+    var earth;
+    return earth = new World.Earth();
   });
 
 }).call(this);

@@ -1,7 +1,7 @@
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-  MK.Sky = (function() {
+  World.Sky = (function() {
 
     function Sky() {
       this.move = __bind(this.move, this);
@@ -17,7 +17,7 @@
       this.updateSize();
       this.clouds = [];
       for (pos = 1; pos <= 20; pos++) {
-        this.clouds.push(new MK.Cloud(this, pos));
+        this.clouds.push(new World.Cloud(this, pos));
       }
     }
 

@@ -1,10 +1,10 @@
-class MK.World
+class World.Earth
 
   # Construct a world
   #
   constructor: ->
-    @sea = new MK.Sea()
-    @sky = new MK.Sky()
+    @sea = new World.Sea()
+    @sky = new World.Sky()
 
     $('body').append @sea.el
     $('body').append @sky.el
