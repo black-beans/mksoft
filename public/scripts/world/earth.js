@@ -8,7 +8,6 @@
       this.sky = new World.Sky();
       $('body').append(this.sea.el);
       $('body').append(this.sky.el);
-      setInterval(this.move, 10);
     }
 
     Earth.prototype.move = function() {

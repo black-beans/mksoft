@@ -9271,9 +9271,20 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
   window.World = {};
 
+  window.requestAnimFrame = (function() {
+    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
+      return window.setTimeout(callback, 1000 / 60);
+    };
+  })();
+
   $(function() {
-    var earth;
-    return earth = new World.Earth();
+    var animloop, earth;
+    earth = new World.Earth();
+    animloop = function() {
+      requestAnimFrame(animloop);
+      return earth.move();
+    };
+    return requestAnimFrame(animloop);
   });
 
 }).call(this);
@@ -9308,7 +9319,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       this.sky = new World.Sky();
       $('body').append(this.sea.el);
       $('body').append(this.sky.el);
-      setInterval(this.move, 10);
     }
 
     Earth.prototype.move = function() {
