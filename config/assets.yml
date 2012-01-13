@@ -4,6 +4,8 @@ compress_assets: off
 javascripts:
   mksoft:
     - public/libs/jquery.js
+    - public/libs/prefixfree.js
+    - public/libs/prefixfree.jquery.js
     - public/scripts/app.js
     - public/scripts/trig/util.js
     - public/scripts/world/earth.js

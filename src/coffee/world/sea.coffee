@@ -30,7 +30,7 @@ class World.Sea
     @el.css 'height', @height
 
     if @waves
-      wave.el.css('width', @sea.width + 1000) for wave in @waves
+      wave.el.css('width', @width + 1000) for wave in @waves
 
   # Move the sea
   #

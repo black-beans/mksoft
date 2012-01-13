@@ -6,8 +6,16 @@
     function Earth() {
       this.move = __bind(this.move, this);      this.sea = new World.Sea();
       this.sky = new World.Sky();
-      $('body').append(this.sea.el);
-      $('body').append(this.sky.el);
+      this.el = $('<div>');
+      this.el.css('position', 'absolute');
+      this.el.css('top', 0);
+      this.el.css('left', 0);
+      this.el.css('height', '100%');
+      this.el.css('width', '100%');
+      this.el.css('background-image', "" + PrefixFree.prefix + "linear-gradient(bottom, rgb(249,242,231) 0%, rgb(100,166,197) 100%)");
+      this.el.append(this.sea.el);
+      this.el.append(this.sky.el);
+      $('body').append(this.el);
     }
 
     Earth.prototype.move = function() {

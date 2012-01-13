@@ -35,7 +35,7 @@
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           wave = _ref[_i];
-          _results.push(wave.el.css('width', this.sea.width + 1000));
+          _results.push(wave.el.css('width', this.width + 1000));
         }
         return _results;
       }
