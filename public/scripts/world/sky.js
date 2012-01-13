@@ -19,6 +19,8 @@
       for (pos = 1; pos <= 20; pos++) {
         this.clouds.push(new World.Cloud(this, pos));
       }
+      this.sun = new World.Sun(this);
+      this.el.append(this.sun.el);
     }
 
     Sky.prototype.update = function() {
@@ -39,6 +41,7 @@
 
     Sky.prototype.move = function() {
       var cloud, _i, _len, _ref, _results;
+      this.sun.move();
       _ref = this.clouds;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {

@@ -68,12 +68,7 @@
       this.x = Math.floor(Math.random() * this.sky.width) + 1;
       this.y = Math.floor(Math.random() * (this.sky.height - this.el.height())) + 1;
       this.speed = -1 / this.sky.height * (this.y - this.sky.height);
-      this.el.css({
-        '-webkit-transform': "scale(" + this.speed + ")",
-        '-moz-transform': "scale(" + this.speed + ")",
-        '-o-transform': "scale(" + this.speed + ")",
-        '-ms-transform': "scale(" + this.speed + ")"
-      });
+      this.el.css('transform', "scale(" + this.speed + ")");
       this.sky.el.append(this.el);
     }
 

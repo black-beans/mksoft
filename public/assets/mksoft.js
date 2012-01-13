@@ -9778,6 +9778,99 @@ for(var i=0; i<self.properties.length; i++) {
 (function() {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
+  World.Sun = (function() {
+
+    function Sun(sky) {
+      var pos;
+      this.sky = sky;
+      this.move = __bind(this.move, this);
+      this.el = $('<div>');
+      this.el.css('position', 'absolute');
+      this.el.css('width', 250);
+      this.el.css('height', 250);
+      this.el.css('top', Math.floor(Math.random() * ((this.sky.height / 2) - this.el.height())) + 1);
+      this.el.css('left', Math.floor(Math.random() * (this.sky.width - this.el.height())) + 1);
+      this.size = (Math.floor(Math.random() * 30) + 40) / 100;
+      this.el.css('transform', "scale(" + this.size + ")");
+      this.rays = [];
+      for (pos = 1; pos <= 5; pos++) {
+        this.rays.push(new World.Ray(this, pos));
+      }
+    }
+
+    Sun.prototype.move = function() {
+      var ray, _i, _len, _ref, _results;
+      _ref = this.rays;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        ray = _ref[_i];
+        _results.push(ray.move());
+      }
+      return _results;
+    };
+
+    return Sun;
+
+  })();
+
+}).call(this);
+
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
+  World.Ray = (function() {
+
+    function Ray(sun, pos) {
+      this.sun = sun;
+      this.pos = pos;
+      this.move = __bind(this.move, this);
+      console.log(this.pos);
+      switch (this.pos) {
+        case 1:
+          this.speed = -0.5;
+          this.rotate = 15;
+          break;
+        case 2:
+          this.speed = -0.25;
+          this.rotate = 30;
+          break;
+        case 3:
+          this.speed = 0.25;
+          this.rotate = 60;
+          break;
+        case 4:
+          this.speed = 0.5;
+          this.rotate = 75;
+      }
+      this.el = $('<div>');
+      this.el.css('background', 'transparent url(images/sun.png) left top no-repeat');
+      this.el.css('position', 'absolute');
+      this.el.css('width', 250);
+      this.el.css('height', 250);
+      this.el.css('top', 0);
+      this.el.css('left', 0);
+      this.el.css('transform', "rotate(" + this.rotate + "deg)");
+      this.sun.el.append(this.el);
+    }
+
+    Ray.prototype.move = function() {
+      if (this.pos !== 5) {
+        this.rotate = this.rotate + this.speed;
+        if (this.rotate > 360) this.rotate = 0;
+        if (this.rotate < 0) this.rotate = 360;
+        return this.el.css('transform', "rotate(" + this.rotate + "deg)");
+      }
+    };
+
+    return Ray;
+
+  })();
+
+}).call(this);
+
+(function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   World.Sea = (function() {
 
     Sea.waves = 5;
@@ -9894,6 +9987,8 @@ for(var i=0; i<self.properties.length; i++) {
       for (pos = 1; pos <= 20; pos++) {
         this.clouds.push(new World.Cloud(this, pos));
       }
+      this.sun = new World.Sun(this);
+      this.el.append(this.sun.el);
     }
 
     Sky.prototype.update = function() {
@@ -9914,6 +10009,7 @@ for(var i=0; i<self.properties.length; i++) {
 
     Sky.prototype.move = function() {
       var cloud, _i, _len, _ref, _results;
+      this.sun.move();
       _ref = this.clouds;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -9999,12 +10095,7 @@ for(var i=0; i<self.properties.length; i++) {
       this.x = Math.floor(Math.random() * this.sky.width) + 1;
       this.y = Math.floor(Math.random() * (this.sky.height - this.el.height())) + 1;
       this.speed = -1 / this.sky.height * (this.y - this.sky.height);
-      this.el.css({
-        '-webkit-transform': "scale(" + this.speed + ")",
-        '-moz-transform': "scale(" + this.speed + ")",
-        '-o-transform': "scale(" + this.speed + ")",
-        '-ms-transform': "scale(" + this.speed + ")"
-      });
+      this.el.css('transform', "scale(" + this.speed + ")");
       this.sky.el.append(this.el);
     }
 

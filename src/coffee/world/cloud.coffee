@@ -30,11 +30,7 @@ class World.Cloud
     @y = Math.floor(Math.random() * (@sky.height - @el.height())) + 1
     @speed = -1 / @sky.height * (@y - @sky.height)
 
-    @el.css
-      '-webkit-transform': "scale(#{ @speed })"
-      '-moz-transform'   : "scale(#{ @speed })"
-      '-o-transform'     : "scale(#{ @speed })"
-      '-ms-transform'    : "scale(#{ @speed })"
+    @el.css 'transform', "scale(#{ @speed })"
 
     @sky.el.append @el
 

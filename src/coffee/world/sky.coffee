@@ -16,6 +16,9 @@ class World.Sky
     @clouds = []
     @clouds.push(new World.Cloud(@, pos)) for pos in [1..20]
 
+    @sun = new World.Sun(@)
+    @el.append @sun.el
+
   # Calculate the new sky size
   #
   update: =>
@@ -35,4 +38,5 @@ class World.Sky
   # Move the sky
   #
   move: =>
+    @sun.move()
     cloud.move() for cloud in @clouds
