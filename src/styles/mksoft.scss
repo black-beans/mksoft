@@ -9,8 +9,13 @@ body {
   padding: 0;
 
   background-color: $whitetrash;
+
+  #earth {
+    min-height: 400px;
+
+    #sky {
+      min-height: 250px;
+    }
+  }
 }
 
-.circle {
-  background-color: $tropiteal;
-}
