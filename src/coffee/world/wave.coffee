@@ -10,6 +10,7 @@ class World.Wave
     @swellYDeg = Math.floor(Math.random() * 360) + 1
 
     @el = $("<div>")
+    @el.addClass 'wave'
 
     @el.css 'background', "transparent url(images/wave_#{ @sea.swell }.png) left top repeat-x"
     @el.css 'position', 'absolute'

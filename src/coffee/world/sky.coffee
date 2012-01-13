@@ -4,6 +4,8 @@ class World.Sky
   #
   constructor: ->
     @el = $('<div>')
+    @el.attr 'id', 'sky'
+
     @el.css 'position', 'absolute'
     @el.css 'overflow-x', 'hidden'
     @el.css 'overflow-y', 'visible'

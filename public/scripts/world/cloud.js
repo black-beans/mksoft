@@ -61,6 +61,7 @@
       this.move = __bind(this.move, this);
       this.nr = Math.floor(Math.random() * World.Cloud.clouds.length);
       this.el = $('<div>');
+      this.el.addClass('cloud');
       this.el.css('background', "transparent url(images/" + World.Cloud.clouds[this.nr].file + ") left bottom repeat-x");
       this.el.css('position', 'absolute');
       this.el.css('width', World.Cloud.clouds[this.nr].width);

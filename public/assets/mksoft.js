@@ -9753,6 +9753,7 @@ for(var i=0; i<self.properties.length; i++) {
       this.move = __bind(this.move, this);      this.sea = new World.Sea();
       this.sky = new World.Sky();
       this.el = $('<div>');
+      this.el.attr('id', 'earth');
       this.el.css('position', 'absolute');
       this.el.css('top', 0);
       this.el.css('left', 0);
@@ -9780,11 +9781,31 @@ for(var i=0; i<self.properties.length; i++) {
 
   World.Sun = (function() {
 
+    Sun.rays = [
+      {
+        speed: -0.5,
+        rotate: 15
+      }, {
+        speed: -0.25,
+        rotate: 30
+      }, {
+        speed: 0.5,
+        rotate: 60
+      }, {
+        speed: 0.25,
+        rotate: 75
+      }, {
+        speed: 0,
+        rotate: 0
+      }
+    ];
+
     function Sun(sky) {
-      var pos;
+      var r, ray, _i, _len, _ref;
       this.sky = sky;
       this.move = __bind(this.move, this);
       this.el = $('<div>');
+      this.el.attr('id', 'sun');
       this.el.css('position', 'absolute');
       this.el.css('width', 250);
       this.el.css('height', 250);
@@ -9793,8 +9814,12 @@ for(var i=0; i<self.properties.length; i++) {
       this.size = (Math.floor(Math.random() * 30) + 40) / 100;
       this.el.css('transform', "scale(" + this.size + ")");
       this.rays = [];
-      for (pos = 1; pos <= 5; pos++) {
-        this.rays.push(new World.Ray(this, pos));
+      _ref = World.Sun.rays;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        ray = _ref[_i];
+        r = new World.Ray(ray.speed, ray.rotate);
+        this.el.append(r.el);
+        this.rays.push(r);
       }
     }
 
@@ -9820,29 +9845,12 @@ for(var i=0; i<self.properties.length; i++) {
 
   World.Ray = (function() {
 
-    function Ray(sun, pos) {
-      this.sun = sun;
-      this.pos = pos;
+    function Ray(speed, rotate) {
+      this.speed = speed;
+      this.rotate = rotate;
       this.move = __bind(this.move, this);
-      console.log(this.pos);
-      switch (this.pos) {
-        case 1:
-          this.speed = -0.5;
-          this.rotate = 15;
-          break;
-        case 2:
-          this.speed = -0.25;
-          this.rotate = 30;
-          break;
-        case 3:
-          this.speed = 0.25;
-          this.rotate = 60;
-          break;
-        case 4:
-          this.speed = 0.5;
-          this.rotate = 75;
-      }
       this.el = $('<div>');
+      this.el.addClass('ray');
       this.el.css('background', 'transparent url(images/sun.png) left top no-repeat');
       this.el.css('position', 'absolute');
       this.el.css('width', 250);
@@ -9850,16 +9858,13 @@ for(var i=0; i<self.properties.length; i++) {
       this.el.css('top', 0);
       this.el.css('left', 0);
       this.el.css('transform', "rotate(" + this.rotate + "deg)");
-      this.sun.el.append(this.el);
     }
 
     Ray.prototype.move = function() {
-      if (this.pos !== 5) {
-        this.rotate = this.rotate + this.speed;
-        if (this.rotate > 360) this.rotate = 0;
-        if (this.rotate < 0) this.rotate = 360;
-        return this.el.css('transform', "rotate(" + this.rotate + "deg)");
-      }
+      this.rotate = this.rotate + this.speed;
+      if (this.rotate > 360) this.rotate = 0;
+      if (this.rotate < 0) this.rotate = 360;
+      return this.el.css('transform', "rotate(" + this.rotate + "deg)");
     };
 
     return Ray;
@@ -9881,6 +9886,7 @@ for(var i=0; i<self.properties.length; i++) {
       var pos, _ref;
       this.swell = Math.floor(Math.random() * 2) + 1;
       this.el = $('<div>');
+      this.el.attr('id', 'sea');
       this.el.css('position', 'absolute');
       this.el.css('overflow', 'hidden');
       this.el.css('bottom', 0);
@@ -9942,6 +9948,7 @@ for(var i=0; i<self.properties.length; i++) {
       this.swellXDeg = Math.floor(Math.random() * 360) + 1;
       this.swellYDeg = Math.floor(Math.random() * 360) + 1;
       this.el = $("<div>");
+      this.el.addClass('wave');
       this.el.css('background', "transparent url(images/wave_" + this.sea.swell + ".png) left top repeat-x");
       this.el.css('position', 'absolute');
       this.el.css('opacity', 100 / (100 + (10 * (World.Sea.waves - this.pos))));
@@ -9976,6 +9983,7 @@ for(var i=0; i<self.properties.length; i++) {
       this.update = __bind(this.update, this);
       var pos;
       this.el = $('<div>');
+      this.el.attr('id', 'sky');
       this.el.css('position', 'absolute');
       this.el.css('overflow-x', 'hidden');
       this.el.css('overflow-y', 'visible');
@@ -10088,6 +10096,7 @@ for(var i=0; i<self.properties.length; i++) {
       this.move = __bind(this.move, this);
       this.nr = Math.floor(Math.random() * World.Cloud.clouds.length);
       this.el = $('<div>');
+      this.el.addClass('cloud');
       this.el.css('background', "transparent url(images/" + World.Cloud.clouds[this.nr].file + ") left bottom repeat-x");
       this.el.css('position', 'absolute');
       this.el.css('width', World.Cloud.clouds[this.nr].width);

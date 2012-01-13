@@ -8,6 +8,7 @@
       this.update = __bind(this.update, this);
       var pos;
       this.el = $('<div>');
+      this.el.attr('id', 'sky');
       this.el.css('position', 'absolute');
       this.el.css('overflow-x', 'hidden');
       this.el.css('overflow-y', 'visible');

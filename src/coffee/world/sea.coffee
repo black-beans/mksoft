@@ -8,6 +8,8 @@ class World.Sea
     @swell = Math.floor(Math.random() * 2) + 1
 
     @el = $('<div>')
+    @el.attr 'id', 'sea'
+
     @el.css 'position', 'absolute'
     @el.css 'overflow', 'hidden'
     @el.css 'bottom', 0

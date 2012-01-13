@@ -21,6 +21,8 @@ class World.Cloud
     @nr = Math.floor(Math.random() * World.Cloud.clouds.length)
 
     @el = $('<div>')
+    @el.addClass 'cloud'
+
     @el.css 'background', "transparent url(images/#{ World.Cloud.clouds[@nr].file }) left bottom repeat-x"
     @el.css 'position', 'absolute'
     @el.css 'width', World.Cloud.clouds[@nr].width

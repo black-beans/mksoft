@@ -12,6 +12,7 @@
       this.swellXDeg = Math.floor(Math.random() * 360) + 1;
       this.swellYDeg = Math.floor(Math.random() * 360) + 1;
       this.el = $("<div>");
+      this.el.addClass('wave');
       this.el.css('background', "transparent url(images/wave_" + this.sea.swell + ".png) left top repeat-x");
       this.el.css('position', 'absolute');
       this.el.css('opacity', 100 / (100 + (10 * (World.Sea.waves - this.pos))));

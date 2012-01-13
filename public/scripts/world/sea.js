@@ -11,6 +11,7 @@
       var pos, _ref;
       this.swell = Math.floor(Math.random() * 2) + 1;
       this.el = $('<div>');
+      this.el.attr('id', 'sea');
       this.el.css('position', 'absolute');
       this.el.css('overflow', 'hidden');
       this.el.css('bottom', 0);

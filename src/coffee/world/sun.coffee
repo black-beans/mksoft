@@ -1,9 +1,18 @@
 class World.Sun
 
+  @rays: [
+    { speed: -0.5 , rotate: 15 }
+    { speed: -0.25, rotate: 30 }
+    { speed:  0.5 , rotate: 60 }
+    { speed:  0.25, rotate: 75 }
+    { speed:  0   , rotate: 0  }
+  ]
+
   # Construct a sun
   #
   constructor: (@sky)->
     @el = $('<div>')
+    @el.attr 'id', 'sun'
 
     @el.css 'position', 'absolute'
     @el.css 'width', 250
@@ -15,7 +24,11 @@ class World.Sun
     @el.css 'transform', "scale(#{ @size })"
 
     @rays = []
-    @rays.push(new World.Ray(@, pos)) for pos in [1..5]
+
+    for ray in World.Sun.rays
+      r = new World.Ray(ray.speed, ray.rotate)
+      @el.append r.el
+      @rays.push(r)
 
   # Move the rays
   #

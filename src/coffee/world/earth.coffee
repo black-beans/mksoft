@@ -7,6 +7,7 @@ class World.Earth
     @sky = new World.Sky()
 
     @el = $('<div>')
+    @el.attr 'id', 'earth'
 
     @el.css 'position', 'absolute'
     @el.css 'top', 0
