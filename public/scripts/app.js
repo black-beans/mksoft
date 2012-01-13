@@ -11,11 +11,18 @@
   })();
 
   $(function() {
-    var animloop, earth;
+    var animloop, earth, fps, oldtime;
     earth = new World.Earth();
-    animloop = function() {
+    $(document).keypress(function(key) {
+      if (key.which === 97) return $('#fps').toggle();
+    });
+    oldtime = new Date().getTime();
+    fps = 0;
+    animloop = function(time) {
       requestAnimFrame(animloop);
-      return earth.move();
+      earth.move();
+      $('#fps').html("" + (Math.round(1000 / (time - oldtime))) + " FPS");
+      return oldtime = time;
     };
     return requestAnimFrame(animloop);
   });

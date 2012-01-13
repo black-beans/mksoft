@@ -22,6 +22,8 @@
       }
       this.sun = new World.Sun(this);
       this.el.append(this.sun.el);
+      this.ballon = new World.Balloon(this);
+      this.el.append(this.ballon.el);
     }
 
     Sky.prototype.update = function() {
@@ -43,6 +45,7 @@
     Sky.prototype.move = function() {
       var cloud, _i, _len, _ref, _results;
       this.sun.move();
+      this.ballon.move();
       _ref = this.clouds;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {

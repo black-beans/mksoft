@@ -12,9 +12,17 @@ window.requestAnimFrame = do ->
 $(->
   earth = new World.Earth()
 
-  animloop = ->
+  $(document).keypress (key) -> $('#fps').toggle() if key.which is 97
+  oldtime = new Date().getTime()
+  fps = 0
+
+  animloop = (time) ->
     requestAnimFrame animloop
+
     earth.move()
+
+    $('#fps').html("#{ Math.round(1000 / (time - oldtime)) } FPS")
+    oldtime = time
 
   requestAnimFrame animloop
 )

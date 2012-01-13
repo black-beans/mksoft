@@ -6,3 +6,11 @@ body {
     min-height: 400px; }
     body #earth #sky {
       min-height: 250px; }
+  body #fps {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 12px;
+    color: #fff;
+    z-index: 10000;
+    display: none; }

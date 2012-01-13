@@ -21,6 +21,9 @@ class World.Sky
     @sun = new World.Sun(@)
     @el.append @sun.el
 
+    @ballon = new World.Balloon(@)
+    @el.append @ballon.el
+
   # Calculate the new sky size
   #
   update: =>
@@ -41,4 +44,5 @@ class World.Sky
   #
   move: =>
     @sun.move()
+    @ballon.move()
     cloud.move() for cloud in @clouds

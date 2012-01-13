@@ -9,6 +9,7 @@ javascripts:
     - public/scripts/app.js
     - public/scripts/trig/util.js
     - public/scripts/world/earth.js
+    - public/scripts/world/balloon.js
     - public/scripts/world/sun.js
     - public/scripts/world/ray.js
     - public/scripts/world/sea.js
