@@ -12,6 +12,24 @@
 
   $(function() {
     var animloop, earth, fps, oldtime;
+    $('#pages > ul > li').hide();
+    $('#pages').flexslider({
+      manualControls: 'header li',
+      pauseOnAction: true,
+      before: function(slider) {
+        var menu;
+        menu = $('header nav a').get(slider.currentSlide);
+        return $(menu).removeClass('active');
+      },
+      after: function(slider) {
+        var menu;
+        menu = $('header nav a').get(slider.currentSlide);
+        return $(menu).addClass('active');
+      }
+    });
+    $('abbr').mTip({
+      align: 'top'
+    });
     earth = new World.Earth();
     $(document).keypress(function(key) {
       if (key.which === 97) return $('#fps').toggle();

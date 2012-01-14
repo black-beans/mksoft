@@ -8,7 +8,7 @@
       this.sky = new World.Sky();
       this.el = $('<div>');
       this.el.attr('id', 'earth');
-      this.el.css('position', 'absolute');
+      this.el.css('position', 'fixed');
       this.el.css('top', 0);
       this.el.css('left', 0);
       this.el.css('height', '100%');

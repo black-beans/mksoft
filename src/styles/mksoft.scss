@@ -1,3 +1,5 @@
+@import "compass";
+
 $tropiteal     : rgb(0, 168, 198);
 $teal_drop     : rgb(64, 192, 203);
 $whitetrash    : rgb(249, 242, 231);
@@ -29,5 +31,124 @@ body {
 
     display: none;
   }
-}
 
+  #content {
+    position: relative;
+    margin: auto;
+    width: 950px;
+
+    font-family: "museo";
+    font-size: 24px;
+    color: #fff;
+
+    z-index: 50000;
+
+    header {
+      text-shadow: 2px 2px 10px #000;
+
+      h1 {
+        margin-top: 15px;
+        font-size: 48px;
+      }
+
+      nav {
+        ul {
+          @include inline-list;
+
+          li {
+            @include border-radius(10px);
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            margin-right: 10px;
+
+            a {
+              @include rotate(10deg);
+              font-size: 28px;
+              color: #fff;
+              text-decoration: none;
+
+              &:hover, &.active {
+                color: #ff6f00;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    #pages {
+      overflow: hidden;
+      margin-top: 25px;
+
+      width: 850px;
+      height: 500px;
+
+      nav {
+        float: left;
+
+        a {
+          font-family: "baltica-web-extra-condensed";
+          font-size: 200px;
+          text-shadow: 1px 1px 2px #000;
+          text-decoration: none;
+          color: #fff;
+
+          &:hover {
+            color: #ff6f00;
+          }
+        }
+      }
+      .slides {
+        float: left;
+        overflow: auto;
+        list-style-type: none;
+        width: 700px;
+        padding-left: 10px;
+
+        text-shadow: 1px 1px 2px #000;
+
+        li {
+          overflow: scroll;
+
+          h2 {
+            margin-top: 50px;
+          }
+
+          a {
+            color: #3b7daf;
+            text-shadow: 1px 1px 2px #fff;
+            text-decoration: none;
+
+            &:hover {
+              color: #ff6f00;
+            }
+          }
+
+          abbr {
+            @include border-radius(15px);
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 0 5px;
+            cursor: help;
+          }
+
+          ul {
+            @include inline-list;
+
+            li:after {
+              content: "✱";
+              padding: 0 10px;
+            }
+
+            li:last-child:after {
+              content: ''
+            }
+          }
+        }
+      }
+    }
+
+    .flex-control-nav, .flex-direction-nav {
+      display: none;
+    }
+  }
+}

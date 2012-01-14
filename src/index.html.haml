@@ -22,4 +22,113 @@
 
 %body
   #fps
+  #content
+    %header
+      %h1
+        Michael Kessler Softwareentwicklung
+      %nav
+        %ul
+          %li
+            %a{ :href => '#home' } Home
+          %li
+            %a{ :href => '#services' } Leistungen
+          %li
+            %a{ :href => '#technologies' } Technologien
+          %li
+            %a{ :href => '#opensource' } Open Source
+          %li
+            %a{ :href => '#contact' } Kontakt
 
+    #pages
+      %nav.previous
+        %a{ :href => '#' } {
+      %ul.slides
+        %li
+          %h2
+            Ich entwickle
+            %abbr{ :title => 'HyperText Markup Language 5'}
+              HTML5
+            und
+            %abbr{ :title => 'Cascading Style Sheets Level 3'}
+              CSS3
+            Applikationen für das Web der Zukunft.
+        %li
+          %h2
+            Ich kann Dich mit meiner langjährigen Erfahrung
+            bei der Entwicklung und Umsetzung deiner Ideen unterstützen.
+          %ul
+            %li Beratung und Schulung
+            %li Analyse und Konzeption
+            %li Softwareentwicklung
+            %li Systemadministration
+        %li
+          %h2
+            Meine Leidenschaft gilt der testgetriebenen Softwareentwicklung
+            und ich beherrsche einige Technologien.
+          %ul
+            %li HTML5
+            %li CSS3
+            %li JavaScript
+            %li CoffeeScript
+            %li jQuery
+            %li Backbone.js
+            %li Ruby
+            %li Ruby on Rails
+          %h3
+            Als
+            %abbr{ :title => 'Software as a Service' } Saas
+            Shop Lösung verwende ich
+            %a{ :href => 'Shopify' } Shopify
+            und kann einen netten Shop in wenigen Tagen auf die Beine stellen.
+        %li
+          %h2
+            Ich teile gerne mein Wissen und veröffentliche regelmässig
+            interessante Software als Open Source auf
+            %a{ :href => 'https://github.com/netzpirat' } GitHub.
+          %ul
+            %li
+              %a{ :href => 'https://github.com/guard/guard' } Guard
+            %li
+              %a{ :href => 'https://github.com/9elements/haml-coffee' } Haml Coffee Templates
+            %li
+              %a{ :href => 'https://github.com/netzpirat/haml_coffee_assets' } Haml Coffee Assets
+            %li
+              %a{ :href => 'https://github.com/netzpirat/guard-jasmine' } Guard::Jasmine
+            %li
+              %a{ :href => 'https://github.com/netzpirat/guard-cucumber' } Guard::Cucumber
+            %li
+              %a{ :href => 'https://github.com/netzpirat/guard-coffeescript' } Guard::CoffeeScript
+            %li
+              %a{ :href => 'https://github.com/netzpirat/guard-rspectacle' } Guard::RSpectacle
+            %li
+              %a{ :href => 'https://github.com/netzpirat/coffee-brew' } CoffeeBrew
+        %li
+          %h3 Per E-Mail und Telefon
+          %ul
+            %li
+              %a{ :href => 'mailto:hallo@mksoft.ch' } hallo@mksoft.ch
+            %li
+              %a{ :href => 'tel:0041792445561' } +41 79 244 55 61
+          %h3 Social Media
+          %ul
+            %li
+              %a{ :href => 'https://twitter.com/#!/netzpirat' } Twitter
+            %li
+              %a{ :href => 'https://www.xing.com/profile/Michael_Kessler20' } Xing
+          %h3 Offline
+          %address
+            Michael Kessler
+            Schulgasse 8
+            CH-5620 Bremgarten
+      %nav.next
+        %a{ :href => '#' } }
+
+    -#footer
+      %a{ :href => 'mailto:hallo@mksoft.ch' }
+        hallo@mksoft.ch
+      %span
+        +41 79 244 55 61
+      %address
+        Michael Kessler
+        Schulgasse 8
+        CH-5620 Bremgarten

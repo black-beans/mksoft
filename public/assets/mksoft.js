@@ -9265,6 +9265,587 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 })( window );
 
+/*
+ * jQuery FlexSlider v1.8
+ * http://flex.madebymufffin.com
+ *
+ * Copyright 2011, Tyler Smith
+ * Free to use under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * Contrib: Darin Richardson
+ */
+
+;(function ($) {
+  
+  //FlexSlider: Object Instance
+  $.flexslider = function(el, options) {
+    var slider = el;
+
+    slider.init = function() {
+      slider.vars = $.extend({}, $.flexslider.defaults, options);
+      slider.data('flexslider', true);
+      slider.container = $('.slides', slider);
+      slider.slides = $('.slides > li', slider);
+      slider.count = slider.slides.length;
+      slider.animating = false;
+      slider.currentSlide = slider.vars.slideToStart;
+      slider.animatingTo = slider.currentSlide;
+      slider.atEnd = (slider.currentSlide == 0) ? true : false;
+      slider.eventType = ('ontouchstart' in document.documentElement) ? 'touchstart' : 'click';
+      slider.cloneCount = 0;
+      slider.cloneOffset = 0;
+      slider.manualPause = false;
+      slider.vertical = (slider.vars.slideDirection == "vertical");
+      slider.prop = (slider.vertical) ? "top" : "marginLeft";
+      slider.args = {};
+      
+      //Test for webbkit CSS3 Animations
+      slider.transitions = "webkitTransition" in document.body.style;
+      if (slider.transitions) slider.prop = "-webkit-transform";
+      
+      //Test for controlsContainer
+      if (slider.vars.controlsContainer != "") {
+        slider.controlsContainer = $(slider.vars.controlsContainer).eq($('.slides').index(slider.container));
+        slider.containerExists = slider.controlsContainer.length > 0;
+      }
+      //Test for manualControls
+      if (slider.vars.manualControls != "") {
+        slider.manualControls = $(slider.vars.manualControls, ((slider.containerExists) ? slider.controlsContainer : slider));
+        slider.manualExists = slider.manualControls.length > 0;
+      }
+      
+      ///////////////////////////////////////////////////////////////////
+      // FlexSlider: Randomize Slides
+      if (slider.vars.randomize) {
+        slider.slides.sort(function() { return (Math.round(Math.random())-0.5); });
+        slider.container.empty().append(slider.slides);
+      }
+      ///////////////////////////////////////////////////////////////////
+      
+      ///////////////////////////////////////////////////////////////////
+      // FlexSlider: Slider Animation Initialize
+      if (slider.vars.animation.toLowerCase() == "slide") {
+        if (slider.transitions) {
+          slider.setTransition(0);
+        }
+        slider.css({"overflow": "hidden"});
+        if (slider.vars.animationLoop) {
+          slider.cloneCount = 2;
+          slider.cloneOffset = 1;
+          slider.container.append(slider.slides.filter(':first').clone().addClass('clone')).prepend(slider.slides.filter(':last').clone().addClass('clone'));
+        }
+        //create newSlides to capture possible clones
+        slider.newSlides = $('.slides > li', slider);
+        var sliderOffset = (-1 * (slider.currentSlide + slider.cloneOffset));
+        if (slider.vertical) {
+          slider.newSlides.css({"display": "block", "width": "100%", "float": "left"});
+          slider.container.height((slider.count + slider.cloneCount) * 200 + "%").css("position", "absolute").width("100%");
+          //Timeout function to give browser enough time to get proper height initially
+          setTimeout(function() {
+            slider.css({"position": "relative"}).height(slider.slides.filter(':first').height());
+            slider.args[slider.prop] = (slider.transitions) ? "translate3d(0," + sliderOffset * slider.height() + "px,0)" : sliderOffset * slider.height() + "px";
+            slider.container.css(slider.args);
+          }, 100);
+
+        } else {
+          slider.args[slider.prop] = (slider.transitions) ? "translate3d(" + sliderOffset * slider.width() + "px,0,0)" : sliderOffset * slider.width() + "px";
+          slider.container.width((slider.count + slider.cloneCount) * 200 + "%").css(slider.args);
+          //Timeout function to give browser enough time to get proper width initially
+          setTimeout(function() {
+            slider.newSlides.width(slider.width()).css({"float": "left", "display": "block"});
+          }, 100);
+        }
+        
+      } else { //Default to fade
+        //Not supporting fade CSS3 transitions right now
+        slider.transitions = false;
+        slider.slides.css({"width": "100%", "float": "left", "marginRight": "-100%"}).eq(slider.currentSlide).fadeIn(slider.vars.animationDuration); 
+      }
+      ///////////////////////////////////////////////////////////////////
+      
+      ///////////////////////////////////////////////////////////////////
+      // FlexSlider: Control Nav
+      if (slider.vars.controlNav) {
+        if (slider.manualExists) {
+          slider.controlNav = slider.manualControls;
+        } else {
+          var controlNavScaffold = $('<ol class="flex-control-nav"></ol>');
+          var j = 1;
+          for (var i = 0; i < slider.count; i++) {
+            controlNavScaffold.append('<li><a>' + j + '</a></li>');
+            j++;
+          }
+
+          if (slider.containerExists) {
+            $(slider.controlsContainer).append(controlNavScaffold);
+            slider.controlNav = $('.flex-control-nav li a', slider.controlsContainer);
+          } else {
+            slider.append(controlNavScaffold);
+            slider.controlNav = $('.flex-control-nav li a', slider);
+          }
+        }
+
+        slider.controlNav.eq(slider.currentSlide).addClass('active');
+
+        slider.controlNav.bind(slider.eventType, function(event) {
+          event.preventDefault();
+          if (!$(this).hasClass('active')) {
+            (slider.controlNav.index($(this)) > slider.currentSlide) ? slider.direction = "next" : slider.direction = "prev";
+            slider.flexAnimate(slider.controlNav.index($(this)), slider.vars.pauseOnAction);
+          }
+        });
+      }
+      ///////////////////////////////////////////////////////////////////
+      
+      //////////////////////////////////////////////////////////////////
+      //FlexSlider: Direction Nav
+      if (slider.vars.directionNav) {
+        var directionNavScaffold = $('<ul class="flex-direction-nav"><li><a class="prev" href="#">' + slider.vars.prevText + '</a></li><li><a class="next" href="#">' + slider.vars.nextText + '</a></li></ul>');
+        
+        if (slider.containerExists) {
+          $(slider.controlsContainer).append(directionNavScaffold);
+          slider.directionNav = $('.flex-direction-nav li a', slider.controlsContainer);
+        } else {
+          slider.append(directionNavScaffold);
+          slider.directionNav = $('.flex-direction-nav li a', slider);
+        }
+        
+        //Set initial disable styles if necessary
+        if (!slider.vars.animationLoop) {
+          if (slider.currentSlide == 0) {
+            slider.directionNav.filter('.prev').addClass('disabled');
+          } else if (slider.currentSlide == slider.count - 1) {
+            slider.directionNav.filter('.next').addClass('disabled');
+          }
+        }
+        
+        slider.directionNav.bind(slider.eventType, function(event) {
+          event.preventDefault();
+          var target = ($(this).hasClass('next')) ? slider.getTarget('next') : slider.getTarget('prev');
+          
+          if (slider.canAdvance(target)) {
+            slider.flexAnimate(target, slider.vars.pauseOnAction);
+          }
+        });
+      }
+      //////////////////////////////////////////////////////////////////
+      
+      //////////////////////////////////////////////////////////////////
+      //FlexSlider: Keyboard Nav
+      if (slider.vars.keyboardNav && $('ul.slides').length == 1) {
+        function keyboardMove(event) {
+          if (slider.animating) {
+            return;
+          } else if (event.keyCode != 39 && event.keyCode != 37){
+            return;
+          } else {
+            if (event.keyCode == 39) {
+              var target = slider.getTarget('next');
+            } else if (event.keyCode == 37){
+              var target = slider.getTarget('prev');
+            }
+        
+            if (slider.canAdvance(target)) {
+              slider.flexAnimate(target, slider.vars.pauseOnAction);
+            }
+          }
+        }
+        $(document).bind('keyup', keyboardMove);
+      }
+      //////////////////////////////////////////////////////////////////
+      
+      ///////////////////////////////////////////////////////////////////
+      // FlexSlider: Mousewheel interaction
+      if (slider.vars.mousewheel) {
+        slider.mousewheelEvent = (/Firefox/i.test(navigator.userAgent)) ? "DOMMouseScroll" : "mousewheel";
+        slider.bind(slider.mousewheelEvent, function(e) {
+          e.preventDefault();
+          e = e ? e : window.event;
+          var wheelData = e.detail ? e.detail * -1 : e.wheelDelta / 40,
+              target = (wheelData < 0) ? slider.getTarget('next') : slider.getTarget('prev');
+          
+          if (slider.canAdvance(target)) {
+            slider.flexAnimate(target, slider.vars.pauseOnAction);
+          }
+        });
+      }
+      ///////////////////////////////////////////////////////////////////
+      
+      //////////////////////////////////////////////////////////////////
+      //FlexSlider: Slideshow Setup
+      if (slider.vars.slideshow) {
+        //pauseOnHover
+        if (slider.vars.pauseOnHover && slider.vars.slideshow) {
+          slider.hover(function() {
+            slider.pause();
+          }, function() {
+            if (!slider.manualPause) {
+              slider.resume();
+            }
+          });
+        }
+
+        //Initialize animation
+        slider.animatedSlides = setInterval(slider.animateSlides, slider.vars.slideshowSpeed);
+      }
+      //////////////////////////////////////////////////////////////////
+      
+      //////////////////////////////////////////////////////////////////
+      //FlexSlider: Pause/Play
+      if (slider.vars.pausePlay) {
+        var pausePlayScaffold = $('<div class="flex-pauseplay"><span></span></div>');
+      
+        if (slider.containerExists) {
+          slider.controlsContainer.append(pausePlayScaffold);
+          slider.pausePlay = $('.flex-pauseplay span', slider.controlsContainer);
+        } else {
+          slider.append(pausePlayScaffold);
+          slider.pausePlay = $('.flex-pauseplay span', slider);
+        }
+        
+        var pausePlayState = (slider.vars.slideshow) ? 'pause' : 'play';
+        slider.pausePlay.addClass(pausePlayState).text((pausePlayState == 'pause') ? slider.vars.pauseText : slider.vars.playText);
+        
+        slider.pausePlay.bind(slider.eventType, function(event) {
+          event.preventDefault();
+          if ($(this).hasClass('pause')) {
+            slider.pause();
+            slider.manualPause = true;
+          } else {
+            slider.resume();
+            slider.manualPause = false;
+          }
+        });
+      }
+      //////////////////////////////////////////////////////////////////
+      
+      //////////////////////////////////////////////////////////////////
+      //FlexSlider:Touch Swip Gestures
+      //Some brilliant concepts adapted from the following sources
+      //Source: TouchSwipe - http://www.netcu.de/jquery-touchwipe-iphone-ipad-library
+      //Source: SwipeJS - http://swipejs.com
+      if ('ontouchstart' in document.documentElement) {
+        //For brevity, variables are named for x-axis scrolling
+        //The variables are then swapped if vertical sliding is applied
+        //This reduces redundant code...I think :)
+        //If debugging, recognize variables are named for horizontal scrolling
+        var startX,
+          startY,
+          offset,
+          cwidth,
+          dx,
+          startT,
+          scrolling = false;
+              
+        slider.each(function() {
+          if ('ontouchstart' in document.documentElement) {
+            this.addEventListener('touchstart', onTouchStart, false);
+          }
+        });
+        
+        function onTouchStart(e) {
+          if (slider.animating) {
+            e.preventDefault();
+          } else if (e.touches.length == 1) {
+            slider.pause();
+            cwidth = (slider.vertical) ? slider.height() : slider.width();
+            startT = Number(new Date());
+            offset = (slider.vertical) ? (slider.currentSlide + slider.cloneOffset) * slider.height() : (slider.currentSlide + slider.cloneOffset) * slider.width();
+            startX = (slider.vertical) ? e.touches[0].pageY : e.touches[0].pageX;
+            startY = (slider.vertical) ? e.touches[0].pageX : e.touches[0].pageY;
+            slider.setTransition(0);
+
+            this.addEventListener('touchmove', onTouchMove, false);
+            this.addEventListener('touchend', onTouchEnd, false);
+          }
+        }
+
+        function onTouchMove(e) {
+          dx = (slider.vertical) ? startX - e.touches[0].pageY : startX - e.touches[0].pageX;
+          scrolling = (slider.vertical) ? (Math.abs(dx) < Math.abs(e.touches[0].pageX - startY)) : (Math.abs(dx) < Math.abs(e.touches[0].pageY - startY));
+
+          if (!scrolling) {
+            e.preventDefault();
+            if (slider.vars.animation == "slide" && slider.transitions) {
+              if (!slider.vars.animationLoop) {
+                dx = dx/((slider.currentSlide == 0 && dx < 0 || slider.currentSlide == slider.count - 1 && dx > 0) ? (Math.abs(dx)/cwidth+2) : 1);
+              }
+              slider.args[slider.prop] = (slider.vertical) ? "translate3d(0," + (-offset - dx) + "px,0)": "translate3d(" + (-offset - dx) + "px,0,0)";
+              slider.container.css(slider.args);
+            }
+          }
+        }
+        
+        function onTouchEnd(e) {
+          slider.animating = false;
+          if (slider.animatingTo == slider.currentSlide && !scrolling && !(dx == null)) {
+            var target = (dx > 0) ? slider.getTarget('next') : slider.getTarget('prev');
+            if (slider.canAdvance(target) && Number(new Date()) - startT < 550 && Math.abs(dx) > 20 || Math.abs(dx) > cwidth/2) {
+              slider.flexAnimate(target, slider.vars.pauseOnAction);
+            } else {
+              slider.flexAnimate(slider.currentSlide, slider.vars.pauseOnAction);
+            }
+          }
+          
+          //Finish the touch by undoing the touch session
+          this.removeEventListener('touchmove', onTouchMove, false);
+          this.removeEventListener('touchend', onTouchEnd, false);
+          startX = null;
+          startY = null;
+          dx = null;
+          offset = null;
+        }
+      }
+      //////////////////////////////////////////////////////////////////
+      
+      //////////////////////////////////////////////////////////////////
+      //FlexSlider: Resize Functions (If necessary)
+      if (slider.vars.animation.toLowerCase() == "slide") {
+        $(window).resize(function(){
+          if (!slider.animating) {
+            if (slider.vertical) {
+              slider.height(slider.slides.filter(':first').height());
+              slider.args[slider.prop] = (-1 * (slider.currentSlide + slider.cloneOffset))* slider.slides.filter(':first').height() + "px";
+              if (slider.transitions) {
+                slider.setTransition(0);
+                slider.args[slider.prop] = (slider.vertical) ? "translate3d(0," + slider.args[slider.prop] + ",0)" : "translate3d(" + slider.args[slider.prop] + ",0,0)";
+              }
+              slider.container.css(slider.args);
+            } else {
+              slider.newSlides.width(slider.width());
+              slider.args[slider.prop] = (-1 * (slider.currentSlide + slider.cloneOffset))* slider.width() + "px";
+              if (slider.transitions) {
+                slider.setTransition(0);
+                slider.args[slider.prop] = (slider.vertical) ? "translate3d(0," + slider.args[slider.prop] + ",0)" : "translate3d(" + slider.args[slider.prop] + ",0,0)";
+              }
+              slider.container.css(slider.args);
+            }
+          }
+        });
+      }
+      //////////////////////////////////////////////////////////////////
+      
+      //////////////////////////////////////////////////////////////////
+      //FlexSlider: Destroy the slider entity
+      //Destory is not included in the minified version right now, but this is a working function for anyone who wants to include it.
+      //Simply bind the actions you need from this function into a function in the start() callback to the event of your chosing
+      /*
+      slider.destroy = function() {
+        slider.pause();
+        if (slider.controlNav && slider.vars.manualControls == "") slider.controlNav.closest('.flex-control-nav').remove();
+        if (slider.directionNav) slider.directionNav.closest('.flex-direction-nav').remove();
+        if (slider.vars.pausePlay) slider.pausePlay.closest('.flex-pauseplay').remove();
+        if (slider.vars.keyboardNav && $('ul.slides').length == 1) $(document).unbind('keyup', keyboardMove);
+        if (slider.vars.mousewheel) slider.unbind(slider.mousewheelEvent);
+        if (slider.transitions) slider.each(function(){this.removeEventListener('touchstart', onTouchStart, false);});
+        if (slider.vars.animation == "slide" && slider.vars.animationLoop) slider.newSlides.filter('.clone').remove();
+        if (slider.vertical) slider.height("auto");
+        slider.slides.hide();
+        slider.removeData('flexslider');
+      }
+      */
+      //////////////////////////////////////////////////////////////////
+      
+      //FlexSlider: start() Callback
+      slider.vars.start(slider);
+    }
+    
+    //FlexSlider: Animation Actions
+    slider.flexAnimate = function(target, pause) {
+      if (!slider.animating) {
+        //Animating flag
+        slider.animating = true;
+        
+        //FlexSlider: before() animation Callback
+        slider.animatingTo = target;
+        slider.vars.before(slider);
+        
+        //Optional paramter to pause slider when making an anmiation call
+        if (pause) {
+          slider.pause();
+        }
+        
+        //Update controlNav   
+        if (slider.vars.controlNav) {
+          slider.controlNav.removeClass('active').eq(target).addClass('active');
+        }
+        
+        //Is the slider at either end
+        slider.atEnd = (target == 0 || target == slider.count - 1) ? true : false;
+        if (!slider.vars.animationLoop && slider.vars.directionNav) {
+          if (target == 0) {
+            slider.directionNav.removeClass('disabled').filter('.prev').addClass('disabled');
+          } else if (target == slider.count - 1) {
+            slider.directionNav.removeClass('disabled').filter('.next').addClass('disabled');
+          } else {
+            slider.directionNav.removeClass('disabled');
+          }
+        }
+        
+        if (!slider.vars.animationLoop && target == slider.count - 1) {
+          slider.pause();
+          //FlexSlider: end() of cycle Callback
+          slider.vars.end(slider);
+        }
+        
+        if (slider.vars.animation.toLowerCase() == "slide") {
+          var dimension = (slider.vertical) ? slider.slides.filter(':first').height() : slider.slides.filter(':first').width();
+          
+          if (slider.currentSlide == 0 && target == slider.count - 1 && slider.vars.animationLoop && slider.direction != "next") {
+            slider.slideString = "0px";
+          } else if (slider.currentSlide == slider.count - 1 && target == 0 && slider.vars.animationLoop && slider.direction != "prev") {
+            slider.slideString = (-1 * (slider.count + 1)) * dimension + "px";
+          } else {
+            slider.slideString = (-1 * (target + slider.cloneOffset)) * dimension + "px";
+          }
+          slider.args[slider.prop] = slider.slideString;
+
+          if (slider.transitions) {
+              slider.setTransition(slider.vars.animationDuration); 
+              slider.args[slider.prop] = (slider.vertical) ? "translate3d(0," + slider.slideString + ",0)" : "translate3d(" + slider.slideString + ",0,0)";
+              slider.container.css(slider.args).one("webkitTransitionEnd transitionend", function(){
+                slider.wrapup(dimension);
+              });   
+          } else {
+            slider.container.animate(slider.args, slider.vars.animationDuration, function(){
+              slider.wrapup(dimension);
+            });
+          }
+        } else { //Default to Fade
+          slider.slides.eq(slider.currentSlide).fadeOut(slider.vars.animationDuration);
+          slider.slides.eq(target).fadeIn(slider.vars.animationDuration, function() {
+            slider.wrapup();
+          });
+        }
+      }
+    }
+    
+    //FlexSlider: Function to minify redundant animation actions
+    slider.wrapup = function(dimension) {
+      if (slider.vars.animation == "slide") {
+        //Jump the slider if necessary
+        if (slider.currentSlide == 0 && slider.animatingTo == slider.count - 1 && slider.vars.animationLoop) {
+          slider.args[slider.prop] = (-1 * slider.count) * dimension + "px";
+          if (slider.transitions) {
+            slider.setTransition(0);
+            slider.args[slider.prop] = (slider.vertical) ? "translate3d(0," + slider.args[slider.prop] + ",0)" : "translate3d(" + slider.args[slider.prop] + ",0,0)";
+          }
+          slider.container.css(slider.args);
+        } else if (slider.currentSlide == slider.count - 1 && slider.animatingTo == 0 && slider.vars.animationLoop) {
+          slider.args[slider.prop] = -1 * dimension + "px";
+          if (slider.transitions) {
+            slider.setTransition(0);
+            slider.args[slider.prop] = (slider.vertical) ? "translate3d(0," + slider.args[slider.prop] + ",0)" : "translate3d(" + slider.args[slider.prop] + ",0,0)";
+          }
+          slider.container.css(slider.args);
+        }
+      }
+      slider.animating = false;
+      slider.currentSlide = slider.animatingTo;
+      //FlexSlider: after() animation Callback
+      slider.vars.after(slider);
+    }
+    
+    //FlexSlider: Automatic Slideshow
+    slider.animateSlides = function() {
+      if (!slider.animating) {
+        slider.flexAnimate(slider.getTarget("next"));
+      }
+    }
+    
+    //FlexSlider: Automatic Slideshow Pause
+    slider.pause = function() {
+      clearInterval(slider.animatedSlides);
+      if (slider.vars.pausePlay) {
+        slider.pausePlay.removeClass('pause').addClass('play').text(slider.vars.playText);
+      }
+    }
+    
+    //FlexSlider: Automatic Slideshow Start/Resume
+    slider.resume = function() {
+      slider.animatedSlides = setInterval(slider.animateSlides, slider.vars.slideshowSpeed);
+      if (slider.vars.pausePlay) {
+        slider.pausePlay.removeClass('play').addClass('pause').text(slider.vars.pauseText);
+      }
+    }
+    
+    //FlexSlider: Helper function for non-looping sliders
+    slider.canAdvance = function(target) {
+      if (!slider.vars.animationLoop && slider.atEnd) {
+        if (slider.currentSlide == 0 && target == slider.count - 1 && slider.direction != "next") {
+          return false;
+        } else if (slider.currentSlide == slider.count - 1 && target == 0 && slider.direction == "next") {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }  
+    }
+    
+    //FlexSlider: Helper function to determine animation target
+    slider.getTarget = function(dir) {
+      slider.direction = dir;
+      if (dir == "next") {
+        return (slider.currentSlide == slider.count - 1) ? 0 : slider.currentSlide + 1;
+      } else {
+        return (slider.currentSlide == 0) ? slider.count - 1 : slider.currentSlide - 1;
+      }
+    }
+    
+    //FlexSlider: Helper function to set CSS3 transitions
+    slider.setTransition = function(dur) {
+      slider.container.css({'-webkit-transition-duration': (dur/1000) + "s"});
+    }
+
+    //FlexSlider: Initialize
+    slider.init();
+  }
+  
+  //FlexSlider: Default Settings
+  $.flexslider.defaults = {
+    animation: "fade",              //String: Select your animation type, "fade" or "slide"
+    slideDirection: "horizontal",   //String: Select the sliding direction, "horizontal" or "vertical"
+    slideshow: true,                //Boolean: Animate slider automatically
+    slideshowSpeed: 7000,           //Integer: Set the speed of the slideshow cycling, in milliseconds
+    animationDuration: 600,         //Integer: Set the speed of animations, in milliseconds
+    directionNav: true,             //Boolean: Create navigation for previous/next navigation? (true/false)
+    controlNav: true,               //Boolean: Create navigation for paging control of each clide? Note: Leave true for manualControls usage
+    keyboardNav: true,              //Boolean: Allow slider navigating via keyboard left/right keys
+    mousewheel: false,              //Boolean: Allow slider navigating via mousewheel
+    prevText: "Previous",           //String: Set the text for the "previous" directionNav item
+    nextText: "Next",               //String: Set the text for the "next" directionNav item
+    pausePlay: false,               //Boolean: Create pause/play dynamic element
+    pauseText: 'Pause',             //String: Set the text for the "pause" pausePlay item
+    playText: 'Play',               //String: Set the text for the "play" pausePlay item
+    randomize: false,               //Boolean: Randomize slide order
+    slideToStart: 0,                //Integer: The slide that the slider should start on. Array notation (0 = first slide)
+    animationLoop: true,            //Boolean: Should the animation loop? If false, directionNav will received "disable" classes at either end
+    pauseOnAction: true,            //Boolean: Pause the slideshow when interacting with control elements, highly recommended.
+    pauseOnHover: false,            //Boolean: Pause the slideshow when hovering over slider, then resume when no longer hovering
+    controlsContainer: "",          //Selector: Declare which container the navigation elements should be appended too. Default container is the flexSlider element. Example use would be ".flexslider-container", "#container", etc. If the given element is not found, the default action will be taken.
+    manualControls: "",             //Selector: Declare custom control navigation. Example would be ".flex-control-nav li" or "#tabs-nav li img", etc. The number of elements in your controlNav should match the number of slides/tabs.
+    start: function(){},            //Callback: function(slider) - Fires when the slider loads the first slide
+    before: function(){},           //Callback: function(slider) - Fires asynchronously with each slider animation
+    after: function(){},            //Callback: function(slider) - Fires after each slider animation completes
+    end: function(){}               //Callback: function(slider) - Fires when the slider reaches the last slide (asynchronous)
+  }
+  
+  //FlexSlider: Plugin Function
+  $.fn.flexslider = function(options) {
+    return this.each(function() {
+      if ($(this).find('.slides li').length == 1) {
+        $(this).find('.slides li').fadeIn(400);
+      }
+      else if ($(this).data('flexslider') != true) {
+        new $.flexslider($(this), options);
+      }
+    });
+  }  
+
+})(jQuery);
 /**
  * StyleFix 1.0.1
  * @author Lea Verou
@@ -9700,6 +10281,308 @@ for(var i=0; i<self.properties.length; i++) {
 
 })(window.jQuery, window.PrefixFree);
 
+/**
+ * mTip, by mauvm
+ * Dec 21, 2011
+ * version 1.0.3
+ * http://dev.mauvm.nl/mTip
+ *
+ * mTip is dual licensed under the MIT and GPL licenses.
+ **/
+( function( $ ) {
+	// Functionality
+	var methods = {
+		init		: function( options ) {
+			options = $.extend( true, {}, defaults, options );
+			
+			// Build tip
+			// > Holder
+			options.holder					= options.holder instanceof jQuery 		? options.holder : $( options.holder );
+			
+			// > Events
+			if( typeof options.showOn 		== 'object' )		options.showOn		= options.showOn  .join( ' ' ).replace( ',', ' ' ); // $.extend makes it [ 'mouseenter,focus' ], this changes it back to 'mouseenter focus'
+			if( typeof options.hideOn 		== 'object' )		options.hideOn		= options.hideOn  .join( ' ' ).replace( ',', ' ' ); // This also allowes comma separated event names
+			if( typeof options.updateOn 	== 'object' )		options.updateOn	= options.updateOn.join( ' ' ).replace( ',', ' ' );
+			
+			options.showOn 					= ( '' + options.showOn   ).split( ' ' );
+			options.hideOn 					= ( '' + options.hideOn   ).split( ' ' );
+			options.updateOn 				= ( '' + options.updateOn ).split( ' ' );
+
+			// > Prepare events (cache)
+			var showEvent					= options.showOn  .join( '.mTip ' ) + '.mTip',
+				hideEvent					= options.hideOn  .join( '.mTip ' ) + '.mTip',
+				updateEvent					= options.updateOn.join( '.mTip ' ) + '.mTip';
+			
+			// > Live content
+			var liveContent 				= typeof options.content == 'function';
+			
+			// > Timing options
+			if	   ( options.fade === true  )				options.fade			= defaults.fade;
+			else if( options.fade === false )				options.fade			= 0;
+			
+			if( typeof options.fade			!= 'object' ) 	options.fade 			= [ options.fade, options.fade ];
+			if( typeof options.delay		!= 'object' ) 	options.delay 			= [ options.delay, options.delay ];
+			if( typeof options.fadeEasing 	!= 'object' )	options.fadeEasing 		= [ options.fadeEasing, options.fadeEasing ];
+							
+			// > Aligning
+			if( typeof options.spacing		!= 'object' ) 	options.spacing 		= [ options.spacing, options.spacing ];
+			if( typeof options.align		== 'object' )	options.align			= options.align.join( ' ' );
+
+			options.align 		= {
+				top		: options.align.indexOf( 'top' )    !== -1,
+				bottom	: options.align.indexOf( 'bottom' ) !== -1,
+				left	: options.align.indexOf( 'left' )   !== -1,
+				right	: options.align.indexOf( 'right' )  !== -1
+			};
+			
+			// Alignment class
+			var alignClass 		= 'mTip';
+			
+			if 		( options.align.top )					alignClass += '-top';
+			else if ( options.align.bottom )				alignClass += '-bottom';
+			if 		( options.align.left )					alignClass += '-left';
+			else if ( options.align.right )					alignClass += '-right';
+			
+			// Maintain chainability
+			return this.each( function() {
+				var $this		= $(this),
+					data		= $this.data( 'mTip' ) || {},
+					timer		= [ null, null ], // fadeIn timer, fadeOut timer
+					value		= '';
+
+				// (re)Create tip
+				if( data && data.tipID ) $( '#' + data.tipID ).remove(); // Remove old
+				
+				var tipID		= 'mTip-' + ++defaults._id,
+					$tip		= $( '<div id="' + tipID + '" />' );
+				
+				// Build tip
+				// > Get initial content
+				if( ! liveContent ) {
+					if( options.content ) 	value = options.content;
+					else					value = $this.attr( 'title' );
+				}
+				
+				$this.removeAttr( 'title' );
+			 	
+				// > Set values
+				if( options.className ) 	$tip.addClass( options.className );
+
+				$tip.css( options.css )
+					.addClass( 'mTip ' + alignClass )
+					.html( value );
+					
+				options.holder.append( $tip );
+					
+				data = {
+					tipID		: tipID,
+					tip 		: $tip,
+					timer		: timer,
+					options		: options
+				};
+				
+				// > Prepare callbacks (cache)
+				var showCB		= $.proxy( options.show 		, $this ),
+					hideCB		= $.proxy( options.hide 		, $this ),
+					updateCB	= $.proxy( options.update 		, $this ),
+					bShowCB 	= typeof options.beforeShow 	== 'function' ? $.proxy( options.beforeShow, $this ) : false,
+					bHideCB 	= typeof options.beforeHide 	== 'function' ? $.proxy( options.beforeHide, $this ) : false,
+					bUpdateCB	= typeof options.beforeUpdate 	== 'function' ? $.proxy( options.beforeUpdate, $this ) : false;
+				
+				// > (re)Bind events
+				if( options.keepOnHover && options.hideOn.indexOf( 'mouseleave' ) != -1 ) {
+					$tip.unbind( '.mTip' ) 	// Clear events
+						.bind( 'mouseenter.mTip', function( e ) { $this.mTip( 'show' ); } )
+						.bind( 'mouseleave.mTip', function( e ) { $this.mTip( 'hide' ); } );
+				}
+
+				$this
+					.data( 'mTip', data ) 	// Store data
+					.unbind( '.mTip' ) 		// Clear events
+					.bind( showEvent, function( e ) {
+						if( bShowCB && ! e.isTrigger && bShowCB( $tip, options, e ) === false ) return;				// Before show callback
+
+						if( $.browser.msie ) options.holder.find( 'div.mTip[id^="mTip-"]' ).not( $tip ).hide(); 	// Hide other tooltips // IE Fix, ugh!
+						
+						if( liveContent ) value = $.proxy( options.content, $this )( $tip, data, e );				// Live content
+
+						if( timer[1] ) { clearTimeout( timer[1] ); $tip.stop( true ); timer[1] = null; }			// Clear fadeOut timer
+
+						if( ! value ) return;																		// Don't show if no content
+						
+						if( liveContent ) $tip.html( value );														// Update live content
+						
+						if( options.showOn[0] != options.updateOn[0] ) $this.trigger( options.updateOn[0] );		// Update position
+						
+						timer[0] = setTimeout( function() { showCB( $tip, options, e ); }, options.delay[0] );		// Call show
+					} )
+					.bind( hideEvent, function( e ) {
+						if( bHideCB && ! e.isTrigger && bHideCB( $tip, options, e ) === false ) return;				// Before hide callback
+
+						if( timer[0] ) { clearTimeout( timer[0] ); $tip.stop( true ); timer[0] = null; }			// Clear fadeIn timer
+						
+						if( options.hideOn[0] != options.updateOn[0] ) $this.trigger( options.updateOn[0] );		// Update position
+						
+						timer[1] = setTimeout( function() {	hideCB( $tip, options, e ); }, options.delay[1] );		// Call hide
+					} )
+					.bind( updateEvent, function( e ) {
+						if( options.cancelUpdate ) return;															// Update cancelling
+
+						if( bUpdateCB && ! e.isTrigger && bUpdateCB( $tip, options, e ) === false ) return;			// Before update callback
+						
+						updateCB( $tip, options, e ); 																// Call update
+					} );
+			} );
+		},
+		
+		show		: function() {
+			// Maintain chainability
+			return this.each( function() {
+				var $this	= $(this),
+					data	= $this.data( 'mTip' );
+
+				// Trigger show
+				if( data && data.options && data.options.showOn ) $this.trigger( data.options.showOn[0] );
+			} );
+		},
+		
+		hide		: function() {
+			// Maintain chainability
+			return this.each( function() {
+				var $this	= $(this),
+					data	= $this.data( 'mTip' );
+			
+				// Trigger hide
+				if( data && data.options && data.options.hideOn ) $this.trigger( data.options.hideOn[0] );
+			} );
+		},
+		
+		update		: function( html ) {
+			// Maintain chainability
+			return this.each( function() {
+				var $this	= $(this),
+					data	= $this.data( 'mTip' );
+			
+				if( data && data.tip ) {
+					// Update content
+					if( typeof html == 'string' ) data.tip.html( html );
+					
+					// Trigger update
+					if( data.options && data.options.updateOn ) $this.trigger( data.options.updateOn[0] );
+				}
+			} );
+		},
+		
+		get			: function() {
+			// Make list of elements
+			var tips = [];
+
+			this.each( function() {
+				var data	= $(this).data( 'mTip' );
+				
+				if( data && data.tip ) tips.push( data.tip[0] );
+			} );
+			
+			// Return list as jQuery object
+			return $( tips );
+		}
+	};
+	
+	// Logic
+	$.fn.mTip = function( method ) {
+		if( methods[method] )								{ return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ) ); }
+		else if( typeof method == 'object' || ! method )	{ return methods.init.apply( this, arguments ); }
+		else												{ $.error( 'Method ' +  method + ' does not exist on jQuery.mTip' ); }
+	};
+	
+	// Defaults
+	var defaults = {
+		_id				: 0, 							// int: Auto increment tip ID
+		
+		// Events
+		showOn			: 'mouseenter',
+		show			: function( $tip, options ) {	// function
+			$tip.stop( true )
+				.show()
+				.animate( { opacity: options.opacity }, options.fade[0], options.fadeEasing[0] );
+		},
+		beforeShow		: null,							// function
+		
+		hideOn			: 'mouseleave',
+		hide			: function( $tip, options ) {	// function
+			$tip.stop( true )
+				.animate( { opacity: 0 }, options.fade[1], options.fadeEasing[1], function() { $tip.hide() } );
+		},
+		beforeHide		: null,							// function
+		
+		updateOn		: 'mousemove',
+		update			: function( $tip, options, e ) {
+			var $this 		= $(this), x, y, ew = 0, eh = 0, tw = $tip.innerWidth(), th = $tip.innerHeight();
+
+			// Aligning to jQuery object
+			if( options.alignTo instanceof jQuery ) {
+				$this 		= options.alignTo;
+			}
+
+			// Base position
+			if( options.alignTo == 'cursor' ) {
+				// Stick to cursor
+				x 			= e.pageX; 
+				y 			= e.pageY;
+			} else {
+				// Stick to element
+				var offset 	= $this.offset();
+				
+				x 			= offset.left;
+				y 			= offset.top;
+				ew 			= $this.innerWidth();
+				eh 			= $this.innerHeight();
+			}
+			
+			// Calculate X
+			if( options.align.left )		{ x -= tw + options.spacing[0]; }	// Left
+			else if( options.align.right )	{ x += ew + options.spacing[0]; }	// Right
+			else							{ x += ( ew - tw ) / 2; }			// Middle
+
+			// Calculate Y
+			if( options.align.bottom )		{ y += eh + options.spacing[1]; }	// Bottom
+			else if( options.align.top )	{ y -= th + options.spacing[1]; }	// Top
+			else							{ y += ( eh - th ) / 2; }			// Middle
+			
+			// Update position
+			$tip.css( { left: x, top: y } );
+		},
+		beforeUpdate	: null,							// function
+		cancelUpdate	: false,						// bool
+		
+		// Value
+		content			: '',							// string, function
+		
+		// Placement
+		holder			: 'body',						// string, object
+		alignTo			: 'element',					// string
+		align			: 'bottom right',				// string
+		spacing			: 5,							// int, array
+		keepOnHover		: true,							// bool
+		
+		// Timing
+		delay			: 250,							// int, array
+		fade			: 250,							// int, array
+		fadeEasing		: 'linear',						// string
+		
+		// Styling
+		className		: 'black',						// string
+		opacity			: 1,							// double
+		css				: {								// object
+			'opacity'		: 0,
+			'display'		: 'none',
+			'position'		: 'absolute',
+			'z-index'		: 10000
+		}
+	};
+	
+	$.fn.mTip.defaults 	= defaults;
+} )( jQuery );
 (function() {
 
   window.Trig = {};
@@ -9714,6 +10597,24 @@ for(var i=0; i<self.properties.length; i++) {
 
   $(function() {
     var animloop, earth, fps, oldtime;
+    $('#pages > ul > li').hide();
+    $('#pages').flexslider({
+      manualControls: 'header li',
+      pauseOnAction: true,
+      before: function(slider) {
+        var menu;
+        menu = $('header nav a').get(slider.currentSlide);
+        return $(menu).removeClass('active');
+      },
+      after: function(slider) {
+        var menu;
+        menu = $('header nav a').get(slider.currentSlide);
+        return $(menu).addClass('active');
+      }
+    });
+    $('abbr').mTip({
+      align: 'top'
+    });
     earth = new World.Earth();
     $(document).keypress(function(key) {
       if (key.which === 97) return $('#fps').toggle();
@@ -9761,7 +10662,7 @@ for(var i=0; i<self.properties.length; i++) {
       this.sky = new World.Sky();
       this.el = $('<div>');
       this.el.attr('id', 'earth');
-      this.el.css('position', 'absolute');
+      this.el.css('position', 'fixed');
       this.el.css('top', 0);
       this.el.css('left', 0);
       this.el.css('height', '100%');

@@ -9,7 +9,7 @@ class World.Earth
     @el = $('<div>')
     @el.attr 'id', 'earth'
 
-    @el.css 'position', 'absolute'
+    @el.css 'position', 'fixed'
     @el.css 'top', 0
     @el.css 'left', 0
     @el.css 'height', '100%'

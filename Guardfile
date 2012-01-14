@@ -1,6 +1,9 @@
 notification :ruby_gntp
 
-guard 'sass', :input => 'src/styles', :output => 'public/styles'
+guard 'compass', :configuration_file => 'config/compass.rb' do
+  watch(%r{^src/(.*)\.scss})
+end
+
 guard 'coffeescript', :input => 'src/coffee', :output => 'public/scripts'
 
 guard 'haml', :output => 'public', :input => 'src' do

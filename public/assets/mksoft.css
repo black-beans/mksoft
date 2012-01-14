@@ -1,16 +1,310 @@
+/**
+ * mTip black theme, by mauvm
+ * Sep 2, 2011
+ * version 1.0
+ * http://dev.mauvm.nl/mTip
+ *
+ * mTip is dual licensed under the MIT and GPL licenses.
+ **/
+.black.mTip {
+	position: relative;
+	margin: 0;
+	padding: 3px 6px;
+	border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;
+	background-color: #000;
+	background-color: rgba(0,0,0,.7);
+	color: #FFF;
+	z-index: 100000;
+	
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 18px;
+}
+
+/* Arrows */
+.black.mTip:after {
+	content: ' ';
+	width: 0; height: 0;
+	position: absolute;
+	margin: 0;
+	border: 5px solid #000;
+	border-color: transparent;
+}
+
+/* > Top */
+.black.mTip-top {
+	margin: -5px 0 0 0;
+}
+
+.black.mTip-top:after {
+	left: 50%;
+	top: 100%;
+	margin: 0 0 0 -5px;
+	
+	border-top-color: #000;
+	border-top-color: rgba(0,0,0,.7);
+}
+
+/* > Top right */
+.black.mTip-top-right {
+    margin: -5px 0 0 -50px;
+}
+
+.black.mTip-top-right:after {
+	left: 25px;
+	top: 100%;
+	margin: 0 0 0 -5px;
+	
+	border-top-color: #000;
+	border-top-color: rgba(0,0,0,.7);
+}
+
+/* > Right */
+.black.mTip-right {
+	margin: 0 0 0 5px;
+}
+
+.black.mTip-right:after {
+	left: -10px;
+	top: 50%;
+	margin: -5px 0 0;
+	
+	border-right-color: #000;
+	border-right-color: rgba(0,0,0,.7);
+}
+
+/* > Bottom right */
+.black.mTip-bottom-right {
+    margin: 5px 0 0 -50px;
+}
+
+.black.mTip-bottom-right:after {
+	left: 25px;
+	top: -10px;
+	margin: 0 0 0 -5px;
+	
+	border-bottom-color: #000;
+	border-bottom-color: rgba(0,0,0,.7);
+}
+
+/* > Bottom */
+.black.mTip-bottom {
+	margin: 5px 0 0;
+}
+
+.black.mTip-bottom:after {
+	left: 50%;
+	top: -10px;
+	margin: 0 0 0 -5px;
+	
+	border-bottom-color: #000;
+	border-bottom-color: rgba(0,0,0,.7);
+}
+
+/* > Bottom left */
+.black.mTip-bottom-left {
+    margin: 5px 0 0 50px;
+}
+
+.black.mTip-bottom-left:after {
+	right: 20px;
+	top: -10px;
+	margin: 0 0 0 -5px;
+	
+	border-bottom-color: #000;
+	border-bottom-color: rgba(0,0,0,.7);
+}
+
+/* > Left */
+.black.mTip-left {
+	margin: 0 0 0 -5px;
+}
+
+.black.mTip-left:after {
+	left: 100%;
+	top: 50%;
+	margin: -5px 0 0;
+
+	border-left-color: #000;
+	border-left-color: rgba(0,0,0,.7);
+}
+
+/* > Top left */
+.black.mTip-top-left {
+    margin: -5px 0 0 50px;
+}
+
+.black.mTip-top-left:after {
+	right: 20px;
+	top: 100%;
+	margin: 0 0 0 -5px;
+	
+	border-top-color: #000;
+	border-top-color: rgba(0,0,0,.7);
+}
+@charset "UTF-8";
+/* line 9, ../../src/styles/mksoft.scss */
 body {
   margin: 0;
   padding: 0;
-  background-color: #f9f2e7; }
-  body #earth {
-    min-height: 400px; }
-    body #earth #sky {
-      min-height: 250px; }
-  body #fps {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    font-size: 12px;
-    color: #fff;
-    z-index: 10000;
-    display: none; }
+  background-color: #f9f2e7;
+}
+/* line 15, ../../src/styles/mksoft.scss */
+body #earth {
+  min-height: 400px;
+}
+/* line 18, ../../src/styles/mksoft.scss */
+body #earth #sky {
+  min-height: 250px;
+}
+/* line 23, ../../src/styles/mksoft.scss */
+body #fps {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 12px;
+  color: #fff;
+  z-index: 10000;
+  display: none;
+}
+/* line 35, ../../src/styles/mksoft.scss */
+body #content {
+  position: relative;
+  margin: auto;
+  width: 950px;
+  font-family: "museo";
+  font-size: 24px;
+  color: #fff;
+  z-index: 50000;
+}
+/* line 46, ../../src/styles/mksoft.scss */
+body #content header {
+  text-shadow: 2px 2px 10px #000;
+}
+/* line 49, ../../src/styles/mksoft.scss */
+body #content header h1 {
+  margin-top: 15px;
+  font-size: 48px;
+}
+/* line 55, ../../src/styles/mksoft.scss */
+body #content header nav ul {
+  list-style-type: none;
+}
+/* line 5, ../../../../.rvm/gems/ruby-1.9.3-p0/gems/compass-0.11.7/frameworks/compass/stylesheets/compass/typography/lists/_inline-list.scss */
+body #content header nav ul, body #content header nav ul li {
+  margin: 0px;
+  padding: 0px;
+  display: inline;
+}
+/* line 58, ../../src/styles/mksoft.scss */
+body #content header nav ul li {
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -o-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -khtml-border-radius: 10px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  margin-right: 10px;
+}
+/* line 64, ../../src/styles/mksoft.scss */
+body #content header nav ul li a {
+  -moz-transform: rotate(10deg);
+  -webkit-transform: rotate(10deg);
+  -o-transform: rotate(10deg);
+  -ms-transform: rotate(10deg);
+  transform: rotate(10deg);
+  font-size: 28px;
+  color: #fff;
+  text-decoration: none;
+}
+/* line 70, ../../src/styles/mksoft.scss */
+body #content header nav ul li a:hover, body #content header nav ul li a.active {
+  color: #ff6f00;
+}
+/* line 79, ../../src/styles/mksoft.scss */
+body #content #pages {
+  overflow: hidden;
+  margin-top: 25px;
+  width: 850px;
+  height: 500px;
+}
+/* line 86, ../../src/styles/mksoft.scss */
+body #content #pages nav {
+  float: left;
+}
+/* line 89, ../../src/styles/mksoft.scss */
+body #content #pages nav a {
+  font-family: "baltica-web-extra-condensed";
+  font-size: 200px;
+  text-shadow: 1px 1px 2px #000;
+  text-decoration: none;
+  color: #fff;
+}
+/* line 96, ../../src/styles/mksoft.scss */
+body #content #pages nav a:hover {
+  color: #ff6f00;
+}
+/* line 101, ../../src/styles/mksoft.scss */
+body #content #pages .slides {
+  float: left;
+  overflow: auto;
+  list-style-type: none;
+  width: 700px;
+  padding-left: 10px;
+  text-shadow: 1px 1px 2px #000;
+}
+/* line 110, ../../src/styles/mksoft.scss */
+body #content #pages .slides li {
+  overflow: scroll;
+}
+/* line 113, ../../src/styles/mksoft.scss */
+body #content #pages .slides li h2 {
+  margin-top: 50px;
+}
+/* line 117, ../../src/styles/mksoft.scss */
+body #content #pages .slides li a {
+  color: #3b7daf;
+  text-shadow: 1px 1px 2px #fff;
+  text-decoration: none;
+}
+/* line 122, ../../src/styles/mksoft.scss */
+body #content #pages .slides li a:hover {
+  color: #ff6f00;
+}
+/* line 127, ../../src/styles/mksoft.scss */
+body #content #pages .slides li abbr {
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  -o-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -khtml-border-radius: 15px;
+  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0 5px;
+  cursor: help;
+}
+/* line 134, ../../src/styles/mksoft.scss */
+body #content #pages .slides li ul {
+  list-style-type: none;
+}
+/* line 5, ../../../../.rvm/gems/ruby-1.9.3-p0/gems/compass-0.11.7/frameworks/compass/stylesheets/compass/typography/lists/_inline-list.scss */
+body #content #pages .slides li ul, body #content #pages .slides li ul li {
+  margin: 0px;
+  padding: 0px;
+  display: inline;
+}
+/* line 137, ../../src/styles/mksoft.scss */
+body #content #pages .slides li ul li:after {
+  content: "✱";
+  padding: 0 10px;
+}
+/* line 142, ../../src/styles/mksoft.scss */
+body #content #pages .slides li ul li:last-child:after {
+  content: "";
+}
+/* line 150, ../../src/styles/mksoft.scss */
+body #content .flex-control-nav, body #content .flex-direction-nav {
+  display: none;
+}

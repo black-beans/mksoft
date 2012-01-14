@@ -4,8 +4,10 @@ compress_assets: off
 javascripts:
   mksoft:
     - public/libs/jquery.js
+    - public/libs/jquery.flexslider.js
     - public/libs/prefixfree.js
     - public/libs/prefixfree.jquery.js
+    - public/libs/mTip-v1.0.3.src.js
     - public/scripts/app.js
     - public/scripts/trig/util.js
     - public/scripts/world/earth.js

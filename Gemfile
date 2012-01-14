@@ -4,10 +4,11 @@ source 'http://rubygems.org'
 
 gem 'blazing'
 gem 'jammit'
+gem 'compass'
 
 gem 'guard'
 gem 'guard-haml'
-gem 'guard-sass'
+gem 'guard-compass'
 gem 'guard-coffeescript'
 gem 'guard-jammit', :path => '/Users/michi/Repositories/guard-jammit'
 
