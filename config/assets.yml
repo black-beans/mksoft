@@ -3,6 +3,7 @@ compress_assets: off
 
 javascripts:
   mksoft:
+    - public/libs/modernizer.js
     - public/libs/jquery.js
     - public/libs/jquery.flexslider.js
     - public/libs/prefixfree.js

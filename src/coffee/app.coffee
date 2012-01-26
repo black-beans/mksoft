@@ -12,8 +12,10 @@ window.requestAnimFrame = do ->
 $(->
   $('#pages > ul > li').hide()
   $('#pages').flexslider
-    manualControls: 'header li'
+    controlsContainer: '#content'
+    manualControls: 'header li a'
     pauseOnAction: true
+    directionNav: true
     before: (slider) ->
       menu = $('header nav a').get(slider.currentSlide)
       $(menu).removeClass 'active'

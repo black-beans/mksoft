@@ -17,8 +17,19 @@
     %link{ :rel => 'stylesheet', :href => 'assets/mksoft.css' }
 
     %script{ :src => 'https://use.typekit.com/tqs5jht.js' }
-    %script
+    :javascript
       try { Typekit.load(); } catch(e) {}
+
+    :javascript
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-28630996-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
 
 %body
   #fps
@@ -29,29 +40,29 @@
       %nav
         %ul
           %li
-            %a{ :href => '#home' } Home
+            %a{ :href => '#' } Home
           %li
-            %a{ :href => '#services' } Leistungen
+            %a{ :href => '#' } Leistungen
           %li
-            %a{ :href => '#technologies' } Technologien
+            %a{ :href => '#' } Technologien
           %li
-            %a{ :href => '#opensource' } Open Source
+            %a{ :href => '#' } Open Source
           %li
-            %a{ :href => '#contact' } Kontakt
+            %a{ :href => '#' } Kontakt
 
     #pages
-      %nav.previous
-        %a{ :href => '#' } {
+      %div.curly
+        {
       %ul.slides
         %li
           %h2
-            Ich entwickle
+            Ich entwickle mit viel Liebe modernste Applikationen mit
             %abbr{ :title => 'HyperText Markup Language 5'}
               HTML5
             und
             %abbr{ :title => 'Cascading Style Sheets Level 3'}
               CSS3
-            Applikationen für das Web der Zukunft.
+            für das Web der Zukunft.
         %li
           %h2
             Ich kann Dich mit meiner langjährigen Erfahrung
@@ -59,12 +70,13 @@
           %ul
             %li Beratung und Schulung
             %li Analyse und Konzeption
+            %li Projektleitung
             %li Softwareentwicklung
             %li Systemadministration
         %li
           %h2
-            Meine Leidenschaft gilt der testgetriebenen Softwareentwicklung
-            und ich beherrsche einige Technologien.
+            Meine Leidenschaft gilt der Softwareentwicklung
+            und ich bin spezialisiert auf Webentwicklung mit:
           %ul
             %li HTML5
             %li CSS3
@@ -79,7 +91,7 @@
             %abbr{ :title => 'Software as a Service' } Saas
             Shop Lösung verwende ich
             %a{ :href => 'Shopify' } Shopify
-            und kann einen netten Shop in wenigen Tagen auf die Beine stellen.
+            und kann einen kostengünstigen Shop in wenigen Tagen auf die Beine stellen.
         %li
           %h2
             Ich teile gerne mein Wissen und veröffentliche regelmässig
@@ -103,32 +115,15 @@
             %li
               %a{ :href => 'https://github.com/netzpirat/coffee-brew' } CoffeeBrew
         %li
-          %h3 Per E-Mail und Telefon
+          %h2 Du erreichst mich via Email, Telefon oder soziale Medien:
           %ul
             %li
-              %a{ :href => 'mailto:hallo@mksoft.ch' } hallo@mksoft.ch
+              %a{ :href => 'mailto:michi@mksoft.ch' } michi@mksoft.ch
             %li
               %a{ :href => 'tel:0041792445561' } +41 79 244 55 61
-          %h3 Social Media
-          %ul
             %li
               %a{ :href => 'https://twitter.com/#!/netzpirat' } Twitter
             %li
               %a{ :href => 'https://www.xing.com/profile/Michael_Kessler20' } Xing
-          %h3 Offline
-          %address
-            Michael Kessler
-            Schulgasse 8
-            CH-5620 Bremgarten
-      %nav.next
-        %a{ :href => '#' } }
-
-    -#footer
-      %a{ :href => 'mailto:hallo@mksoft.ch' }
-        hallo@mksoft.ch
-      %span
-        +41 79 244 55 61
-      %address
-        Michael Kessler
-        Schulgasse 8
-        CH-5620 Bremgarten
+      %div.curly
+        }

@@ -144,20 +144,25 @@
 }
 @charset "UTF-8";
 /* line 9, ../../src/styles/mksoft.scss */
+bode, html {
+  height: 100%;
+}
+
+/* line 13, ../../src/styles/mksoft.scss */
 body {
   margin: 0;
   padding: 0;
   background-color: #f9f2e7;
 }
-/* line 15, ../../src/styles/mksoft.scss */
+/* line 19, ../../src/styles/mksoft.scss */
 body #earth {
   min-height: 400px;
 }
-/* line 18, ../../src/styles/mksoft.scss */
+/* line 22, ../../src/styles/mksoft.scss */
 body #earth #sky {
   min-height: 250px;
 }
-/* line 23, ../../src/styles/mksoft.scss */
+/* line 27, ../../src/styles/mksoft.scss */
 body #fps {
   position: absolute;
   bottom: 0;
@@ -167,7 +172,7 @@ body #fps {
   z-index: 10000;
   display: none;
 }
-/* line 35, ../../src/styles/mksoft.scss */
+/* line 39, ../../src/styles/mksoft.scss */
 body #content {
   position: relative;
   margin: auto;
@@ -177,16 +182,21 @@ body #content {
   color: #fff;
   z-index: 50000;
 }
-/* line 46, ../../src/styles/mksoft.scss */
+/* line 50, ../../src/styles/mksoft.scss */
 body #content header {
+  overflow: hidden;
   text-shadow: 2px 2px 10px #000;
 }
-/* line 49, ../../src/styles/mksoft.scss */
+/* line 54, ../../src/styles/mksoft.scss */
 body #content header h1 {
   margin-top: 15px;
   font-size: 48px;
 }
-/* line 55, ../../src/styles/mksoft.scss */
+/* line 59, ../../src/styles/mksoft.scss */
+body #content header nav {
+  height: 50px;
+}
+/* line 62, ../../src/styles/mksoft.scss */
 body #content header nav ul {
   list-style-type: none;
 }
@@ -196,7 +206,7 @@ body #content header nav ul, body #content header nav ul li {
   padding: 0px;
   display: inline;
 }
-/* line 58, ../../src/styles/mksoft.scss */
+/* line 65, ../../src/styles/mksoft.scss */
 body #content header nav ul li {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -208,7 +218,7 @@ body #content header nav ul li {
   padding: 10px;
   margin-right: 10px;
 }
-/* line 64, ../../src/styles/mksoft.scss */
+/* line 71, ../../src/styles/mksoft.scss */
 body #content header nav ul li a {
   -moz-transform: rotate(10deg);
   -webkit-transform: rotate(10deg);
@@ -219,45 +229,34 @@ body #content header nav ul li a {
   color: #fff;
   text-decoration: none;
 }
-/* line 70, ../../src/styles/mksoft.scss */
+/* line 77, ../../src/styles/mksoft.scss */
 body #content header nav ul li a:hover, body #content header nav ul li a.active {
   color: #ff6f00;
 }
-/* line 79, ../../src/styles/mksoft.scss */
+/* line 86, ../../src/styles/mksoft.scss */
 body #content #pages {
   overflow: hidden;
   margin-top: 25px;
-  width: 850px;
-  height: 500px;
+  width: 950px;
 }
-/* line 86, ../../src/styles/mksoft.scss */
-body #content #pages nav {
+/* line 92, ../../src/styles/mksoft.scss */
+body #content #pages .curly {
   float: left;
-}
-/* line 89, ../../src/styles/mksoft.scss */
-body #content #pages nav a {
   font-family: "baltica-web-extra-condensed";
   font-size: 200px;
   text-shadow: 1px 1px 2px #000;
   text-decoration: none;
   color: #fff;
 }
-/* line 96, ../../src/styles/mksoft.scss */
-body #content #pages nav a:hover {
-  color: #ff6f00;
-}
-/* line 101, ../../src/styles/mksoft.scss */
+/* line 102, ../../src/styles/mksoft.scss */
 body #content #pages .slides {
   float: left;
-  overflow: auto;
+  overflow: scroll-x;
   list-style-type: none;
   width: 700px;
+  height: 100%;
   padding-left: 10px;
   text-shadow: 1px 1px 2px #000;
-}
-/* line 110, ../../src/styles/mksoft.scss */
-body #content #pages .slides li {
-  overflow: scroll;
 }
 /* line 113, ../../src/styles/mksoft.scss */
 body #content #pages .slides li h2 {

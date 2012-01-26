@@ -14,8 +14,10 @@
     var animloop, earth, fps, oldtime;
     $('#pages > ul > li').hide();
     $('#pages').flexslider({
-      manualControls: 'header li',
+      controlsContainer: '#content',
+      manualControls: 'header li a',
       pauseOnAction: true,
+      directionNav: true,
       before: function(slider) {
         var menu;
         menu = $('header nav a').get(slider.currentSlide);

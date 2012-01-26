@@ -13,8 +13,23 @@
     <script src='assets/mksoft.js'></script>
     <link href='assets/mksoft.css' rel='stylesheet' />
     <script src='https://use.typekit.com/tqs5jht.js'></script>
-    <script>
-      try { Typekit.load(); } catch(e) {}
+    <script type='text/javascript'>
+      //<![CDATA[
+        try { Typekit.load(); } catch(e) {}
+      //]]>
+    </script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-28630996-1']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      //]]>
     </script>
   </head>
 </html>
@@ -28,31 +43,31 @@
       <nav>
         <ul>
           <li>
-            <a href='#home'>Home</a>
+            <a href='#'>Home</a>
           </li>
           <li>
-            <a href='#services'>Leistungen</a>
+            <a href='#'>Leistungen</a>
           </li>
           <li>
-            <a href='#technologies'>Technologien</a>
+            <a href='#'>Technologien</a>
           </li>
           <li>
-            <a href='#opensource'>Open Source</a>
+            <a href='#'>Open Source</a>
           </li>
           <li>
-            <a href='#contact'>Kontakt</a>
+            <a href='#'>Kontakt</a>
           </li>
         </ul>
       </nav>
     </header>
     <div id='pages'>
-      <nav class='previous'>
-        <a href='#'>{</a>
-      </nav>
+      <div class='curly'>
+        {
+      </div>
       <ul class='slides'>
         <li>
           <h2>
-            Ich entwickle
+            Ich entwickle mit viel Liebe modernste Applikationen mit
             <abbr title='HyperText Markup Language 5'>
               HTML5
             </abbr>
@@ -60,7 +75,7 @@
             <abbr title='Cascading Style Sheets Level 3'>
               CSS3
             </abbr>
-            Applikationen für das Web der Zukunft.
+            für das Web der Zukunft.
           </h2>
         </li>
         <li>
@@ -71,14 +86,15 @@
           <ul>
             <li>Beratung und Schulung</li>
             <li>Analyse und Konzeption</li>
+            <li>Projektleitung</li>
             <li>Softwareentwicklung</li>
             <li>Systemadministration</li>
           </ul>
         </li>
         <li>
           <h2>
-            Meine Leidenschaft gilt der testgetriebenen Softwareentwicklung
-            und ich beherrsche einige Technologien.
+            Meine Leidenschaft gilt der Softwareentwicklung
+            und ich bin spezialisiert auf Webentwicklung mit:
           </h2>
           <ul>
             <li>HTML5</li>
@@ -95,7 +111,7 @@
             <abbr title='Software as a Service'>Saas</abbr>
             Shop Lösung verwende ich
             <a href='Shopify'>Shopify</a>
-            und kann einen netten Shop in wenigen Tagen auf die Beine stellen.
+            und kann einen kostengünstigen Shop in wenigen Tagen auf die Beine stellen.
           </h3>
         </li>
         <li>
@@ -132,17 +148,14 @@
           </ul>
         </li>
         <li>
-          <h3>Per E-Mail und Telefon</h3>
+          <h2>Du erreichst mich via Email, Telefon oder soziale Medien:</h2>
           <ul>
             <li>
-              <a href='mailto:hallo@mksoft.ch'>hallo@mksoft.ch</a>
+              <a href='mailto:michi@mksoft.ch'>michi@mksoft.ch</a>
             </li>
             <li>
               <a href='tel:0041792445561'>+41 79 244 55 61</a>
             </li>
-          </ul>
-          <h3>Social Media</h3>
-          <ul>
             <li>
               <a href='https://twitter.com/#!/netzpirat'>Twitter</a>
             </li>
@@ -150,17 +163,11 @@
               <a href='https://www.xing.com/profile/Michael_Kessler20'>Xing</a>
             </li>
           </ul>
-          <h3>Offline</h3>
-          <address>
-            Michael Kessler
-            Schulgasse 8
-            CH-5620 Bremgarten
-          </address>
         </li>
       </ul>
-      <nav class='next'>
-        <a href='#'>}</a>
-      </nav>
+      <div class='curly'>
+        }
+      </div>
     </div>
   </div>
 </body>
