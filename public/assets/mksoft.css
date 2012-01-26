@@ -180,7 +180,7 @@ body #content {
   font-family: "museo";
   font-size: 24px;
   color: #fff;
-  z-index: 50000;
+  z-index: 1000;
 }
 /* line 50, ../../src/styles/mksoft.scss */
 body #content header {
