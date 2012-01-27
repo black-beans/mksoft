@@ -6,8 +6,14 @@
     %meta{ 'http-equiv' => 'content-language', :content => 'de' }
     %meta{ :name => 'robots', :content => 'index,follow' }
     %meta{ :name => 'revisit-after', :content => '7 days' }
-    %meta{ :name => 'description', :content => 'Michael Kessler Softwareentwicklung - Bremgarten AG' }
-    %meta{ :name => 'keywords', :content => 'Software Development, Softwareentwicklung, Webdesign, HTML5, CSS3, Ruby, JavaScript, CoffeeScript, Open Source, CMS, Single Page Application' }
+    %meta{ :name => 'description', :content => 'Michael Kessler Softwareentwicklung - Elegante Web-Applikationen und E-Commerce Systeme' }
+    %meta{ :name => 'keywords', :content => 'Software Development, Softwareentwicklung, Web-Applikationen, Webdesign, E-Commerce, Online-Shop, HTML5, Haml, CSS3, Sass, Ruby, JavaScript, CoffeeScript, Open Source, Shopify, Single Page Application' }
+
+    %link{ :rel => 'openid.server', :href => 'http://www.myopenid.com/server' }
+    %link{ :rel => 'openid.delegate', :href => 'http://mkessler.myopenid.com/' }
+    %link{ :rel => 'openid2.local_id', :href => 'http://mkessler.myopenid.com' }
+    %link{ :rel => 'openid2.provider', :href => 'http://www.myopenid.com/server' }
+    %meta{ 'http-equiv' => 'X-XRDS-Location', :content => 'http://www.myopenid.com/xrds?username=mkessler.myopenid.com' }
 
     %link{ :rel => 'shortcut icon', :href => 'https://mksoft.ch/favicon.ico' }
     %link{ :rel => 'icon', :href => 'https://mksoft.ch/favicon.png', :type => 'image/png' }
@@ -63,6 +69,13 @@
             %abbr{ :title => 'Cascading Style Sheets Level 3'}
               CSS3
             für das Web der Zukunft.
+
+          %p
+            Von der kleinen Webseite bis zum komplexen Online-Shop, immer auf der Suche nach der neusten Technologie
+            für eine optimalen Lösung aus den unendlich vielen Kombinationen.
+          %p
+            Analyse, Design & Implementierung - mehr als 15 Jahre Erfahrung in der Software-Entwicklung!
+
         %li
           %h2
             Ich kann Dich mit meiner langjährigen Erfahrung
@@ -72,30 +85,67 @@
             %li Analyse und Konzeption
             %li Projektleitung
             %li Softwareentwicklung
+            %li Webentwicklung
+            %li
+              %abbr{ :title => 'Rich Internet Application'}
+                RIA
             %li Systemadministration
+          %h3
+            Durch mein flexibles Partner-Netzwerk können weitere
+            spezialisierte Leistungen in die Entwicklung integriert werden:
+          %ul
+            %li Logo Entwicklung
+            %li Webdesign
+            %li Printdesign
+            %li Suchmaschine-Optimierung
+            %li Suchmaschinen-Marketing
+            %li Kommunikation und Medienarbeit
         %li
           %h2
             Meine Leidenschaft gilt der Softwareentwicklung
             und ich bin spezialisiert auf Webentwicklung mit:
           %ul
             %li HTML5
+            %li Haml
             %li CSS3
+            %li Sass
+            %li Compass
             %li JavaScript
             %li CoffeeScript
             %li jQuery
             %li Backbone.js
             %li Ruby
             %li Ruby on Rails
+            %li NodeJS
+
           %h3
-            Als
-            %abbr{ :title => 'Software as a Service' } Saas
-            Shop Lösung verwende ich
-            %a{ :href => 'Shopify' } Shopify
-            und kann einen kostengünstigen Shop in wenigen Tagen auf die Beine stellen.
+            Mit dem perfekten
+            %abbr{ :title => 'Software as a Service' } SaaS
+            Mix zur optimalen Lösung:
+
+          %p
+            Projektmanagement mit
+            %a{ :href => 'http://basecamphq.com/' } Basecamp
+            &
+            = succeed ',' do
+              %a{ :href => 'http://www.targetprocess.com/' } TargetProcess
+            Online-Shops mit
+            %a{ :href => 'http://www.shopify.com/' } Shopify
+            &
+            = succeed ',' do
+              %a{ :href => 'http://spreecommerce.com/' } Spree
+            und E-Mail Marketing mit
+            %a{ :href => 'http://www.cleverreach.de/' } CleverReach
+            &
+            = succeed '.' do
+              %a{ :href => 'http://mailchimp.com/' } MailChimp
+
+          %p Für viele Anforderung existiert bereits eine optimale Lösung!
+
         %li
           %h2
             Ich teile gerne mein Wissen und veröffentliche regelmässig
-            interessante Software als Open Source auf
+            Software als Open Source auf
             %a{ :href => 'https://github.com/netzpirat' } GitHub.
           %ul
             %li
@@ -114,16 +164,33 @@
               %a{ :href => 'https://github.com/netzpirat/guard-rspectacle' } Guard::RSpectacle
             %li
               %a{ :href => 'https://github.com/netzpirat/coffee-brew' } CoffeeBrew
+          %p
+            Als Ruby, Ruby on Rails, JavaScript und CoffeeScript Experte arbeite ich aktiv an verschiedenen Projekten
+            mit, bei welchen der Quellcode öffentlich ist.
+          %p
+            Mach dir ein Bild meiner Arbeiten und wirf einen Blick darauf!
         %li
-          %h2 Du erreichst mich via Email, Telefon oder soziale Medien:
+          %h2 Möchtest Du mehr wissen? Kontaktiere mich per Email oder Telefon!
+
           %ul
             %li
               %a{ :href => 'mailto:michi@mksoft.ch' } michi@mksoft.ch
             %li
               %a{ :href => 'tel:0041792445561' } +41 79 244 55 61
             %li
-              %a{ :href => 'https://twitter.com/#!/netzpirat' } Twitter
-            %li
               %a{ :href => 'https://www.xing.com/profile/Michael_Kessler20' } Xing
+            %li
+              %a{ :href => 'https://twitter.com/#!/netzpirat' } Twitter
+
+          <iframe width="690" height="250" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.ch/maps?f=q&amp;source=s_q&amp;hl=de&amp;geocode=&amp;q=Schulgasse+8,+5620+Bremgarten&amp;aq=0&amp;oq=Schulgasse+8,+5620&amp;sll=47.352258,8.34161&amp;sspn=0.012051,0.01929&amp;ie=UTF8&amp;hq=&amp;hnear=Schulgasse+8,+5620+Bremgarten,+Aargau&amp;t=h&amp;ll=47.351515,8.343794&amp;spn=0.003634,0.014784&amp;z=16&amp;iwloc=A&amp;output=embed"></iframe>
+
+          %ul
+            %li
+              Michael Kessler
+            %li
+              Schulgasse 8
+            %li
+              5620 Bremgarten
+
       %div.curly
         }
