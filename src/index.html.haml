@@ -23,23 +23,11 @@
     %link{ :rel => 'stylesheet', :href => 'assets/mksoft.css' }
 
     %script{ :src => 'https://use.typekit.com/tqs5jht.js' }
-    %script{ :src => 'https://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=AIzaSyAoLl3xFhUpCv_cXLI6D6aS0FdEbO8orNc', :type => 'text/javascript' }
+    %script{ :src => 'http://maps.googleapis.com/maps/api/js?key=AIzaSyAoLl3xFhUpCv_cXLI6D6aS0FdEbO8orNc&sensor=false&region=CH', :type => 'text/javascript' }
 
     :javascript
       try { Typekit.load(); } catch(e) {}
 
-    :javascript
-      $(function() {
-        if (GBrowserIsCompatible()) {
-          var map = new GMap2(document.getElementById('map_canvas'), { size: new GSize(690,350) });
-          var mk = new GLatLng(47.352460 ,8.341992);
-          map.setCenter(mk, 14);
-          map.addOverlay(new GMarker(mk));
-          map.setUIToDefault();
-        }
-      })
-
-    :javascript
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-28630996-1']);
       _gaq.push(['_trackPageview']);
@@ -195,7 +183,8 @@
             %li
               %a{ :href => 'https://twitter.com/#!/netzpirat' } Twitter
 
-          #map_canvas
+          #map_holder
+            #map_canvas
 
           %ul
             %li

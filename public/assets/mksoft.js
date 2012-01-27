@@ -11713,8 +11713,19 @@ for(var i=0; i<self.properties.length; i++) {
   })();
 
   $(function() {
-    var animloop, earth, fps, oldtime;
+    var animloop, earth, fps, map, marker, mkLatlng, oldtime;
     $('#pages > ul > li').hide();
+    mkLatlng = new google.maps.LatLng(47.352460, 8.341992);
+    map = new google.maps.Map(document.getElementById('map_canvas'), {
+      center: mkLatlng,
+      zoom: 16,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+    marker = new google.maps.Marker({
+      position: mkLatlng,
+      title: 'Michael Kessler Softwareentwicklung'
+    });
+    marker.setMap(map);
     $('#pages').flexslider({
       controlsContainer: '#content',
       manualControls: 'header li a',
@@ -11728,7 +11739,8 @@ for(var i=0; i<self.properties.length; i++) {
       after: function(slider) {
         var menu;
         menu = $('header nav a').get(slider.currentSlide);
-        return $(menu).addClass('active');
+        $(menu).addClass('active');
+        return google.maps.event.trigger(map, 'resize');
       }
     });
     $('abbr').mTip({

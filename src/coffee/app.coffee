@@ -11,6 +11,22 @@ window.requestAnimFrame = do ->
 
 $(->
   $('#pages > ul > li').hide()
+
+  mkLatlng = new google.maps.LatLng(47.352460, 8.341992)
+
+  map = new google.maps.Map(document.getElementById('map_canvas'), {
+    center: mkLatlng
+    zoom: 16
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  })
+
+  marker = new google.maps.Marker({
+    position: mkLatlng
+    title: 'Michael Kessler Softwareentwicklung'
+  })
+
+  marker.setMap(map)
+
   $('#pages').flexslider
     controlsContainer: '#content'
     manualControls: 'header li a'
@@ -22,6 +38,7 @@ $(->
     after: (slider) ->
       menu = $('header nav a').get(slider.currentSlide)
       $(menu).addClass 'active'
+      google.maps.event.trigger(map, 'resize')
 
   $('abbr').mTip
     align: 'top'

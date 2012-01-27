@@ -18,27 +18,11 @@
     <script src='assets/mksoft.js'></script>
     <link href='assets/mksoft.css' rel='stylesheet' />
     <script src='https://use.typekit.com/tqs5jht.js'></script>
-    <script src='https://maps.google.com/maps?file=api&amp;amp;v=2&amp;amp;sensor=true&amp;amp;key=AIzaSyAoLl3xFhUpCv_cXLI6D6aS0FdEbO8orNc' type='text/javascript'></script>
+    <script src='http://maps.googleapis.com/maps/api/js?key=AIzaSyAoLl3xFhUpCv_cXLI6D6aS0FdEbO8orNc&amp;sensor=false&amp;region=CH' type='text/javascript'></script>
     <script type='text/javascript'>
       //<![CDATA[
         try { Typekit.load(); } catch(e) {}
-      //]]>
-    </script>
-    <script type='text/javascript'>
-      //<![CDATA[
-        $(function() {
-          if (GBrowserIsCompatible()) {
-            var map = new GMap2(document.getElementById('map_canvas'), { size: new GSize(690,350) });
-            var mk = new GLatLng(47.352460 ,8.341992);
-            map.setCenter(mk, 14);
-            map.addOverlay(new GMarker(mk));
-            map.setUIToDefault();
-          }
-        })
-      //]]>
-    </script>
-    <script type='text/javascript'>
-      //<![CDATA[
+        
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-28630996-1']);
         _gaq.push(['_trackPageview']);
@@ -231,7 +215,9 @@
               <a href='https://twitter.com/#!/netzpirat'>Twitter</a>
             </li>
           </ul>
-          <div id='map_canvas'></div>
+          <div id='map_holder'>
+            <div id='map_canvas'></div>
+          </div>
           <ul>
             <li>
               Michael Kessler
