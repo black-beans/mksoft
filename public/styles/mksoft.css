@@ -160,7 +160,7 @@ body #content #pages .slides li ul li:last-child:after {
 }
 /* line 146, ../../src/styles/mksoft.scss */
 body #content #pages .slides li iframe {
-  margin: 45px 0;
+  margin: 45px 0 15px 0;
   -moz-border-radius: 15px;
   -webkit-border-radius: 15px;
   -o-border-radius: 15px;
