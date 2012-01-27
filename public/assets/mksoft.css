@@ -184,7 +184,7 @@ body #content {
 }
 /* line 50, ../../src/styles/mksoft.scss */
 body #content header {
-  overflow: hidden;
+  overflow: visible;
   text-shadow: 2px 2px 10px #000;
 }
 /* line 54, ../../src/styles/mksoft.scss */
