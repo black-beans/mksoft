@@ -10,7 +10,6 @@ window.requestAnimFrame = do ->
   (callback) -> window.setTimeout(callback, 1000 / 60)
 
 $(->
-  $('#pages > ul > li').hide()
 
   mkLatlng = new google.maps.LatLng(47.352460, 8.341992)
 
@@ -27,6 +26,8 @@ $(->
 
   marker.setMap(map)
 
+  $('#pages > ul > li').hide()
+
   $('#pages').flexslider
     controlsContainer: '#content'
     manualControls: 'header li a'
@@ -39,6 +40,7 @@ $(->
       menu = $('header nav a').get(slider.currentSlide)
       $(menu).addClass 'active'
       google.maps.event.trigger(map, 'resize')
+      map.setCenter mkLatlng
 
   $('abbr').mTip
     align: 'top'
