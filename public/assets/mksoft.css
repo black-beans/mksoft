@@ -303,20 +303,18 @@ body #content #pages .slides li ul li:last-child:after {
   content: "";
 }
 /* line 146, ../../src/styles/mksoft.scss */
-body #content #pages .slides li iframe {
-  margin: 45px 0 15px 0;
-  -moz-border-radius: 15px;
-  -webkit-border-radius: 15px;
-  -o-border-radius: 15px;
-  -ms-border-radius: 15px;
-  -khtml-border-radius: 15px;
-  border-radius: 15px;
+body #content #pages .slides li #map_canvas {
   -moz-box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   -o-box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  z-index: 5000;
+  overflow: hidden;
+  width: 690px;
+  height: 350px;
+  margin: 45px 0 15px 0;
 }
-/* line 155, ../../src/styles/mksoft.scss */
+/* line 160, ../../src/styles/mksoft.scss */
 body #content .flex-control-nav, body #content .flex-direction-nav {
   display: none;
 }

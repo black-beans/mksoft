@@ -18,9 +18,23 @@
     <script src='assets/mksoft.js'></script>
     <link href='assets/mksoft.css' rel='stylesheet' />
     <script src='https://use.typekit.com/tqs5jht.js'></script>
+    <script src='https://maps.google.com/maps?file=api&amp;amp;v=2&amp;amp;sensor=true&amp;amp;key=ABQIAAAAKmYcc1VMwnnq1ZUjZjlsahTj0M4fv7Zgn_94rU_K5eQsba_jwRSH1uo7gnv9NhlPBaWYHJHBPUl4QA' type='text/javascript'></script>
     <script type='text/javascript'>
       //<![CDATA[
         try { Typekit.load(); } catch(e) {}
+      //]]>
+    </script>
+    <script type='text/javascript'>
+      //<![CDATA[
+        $(function() {
+          if (GBrowserIsCompatible()) {
+            var map = new GMap2(document.getElementById('map_canvas'), { size: new GSize(690,350) });
+            var mk = new GLatLng(47.352460 ,8.341992);
+            map.setCenter(mk, 14);
+            map.addOverlay(new GMarker(mk));
+            map.setUIToDefault();
+          }
+        })
       //]]>
     </script>
     <script type='text/javascript'>
@@ -217,7 +231,7 @@
               <a href='https://twitter.com/#!/netzpirat'>Twitter</a>
             </li>
           </ul>
-          <iframe width="690" height="250" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.ch/maps?f=q&amp;source=s_q&amp;hl=de&amp;geocode=&amp;q=Schulgasse+8,+5620+Bremgarten&amp;aq=0&amp;oq=Schulgasse+8,+5620&amp;sll=47.352258,8.34161&amp;sspn=0.012051,0.01929&amp;ie=UTF8&amp;hq=&amp;hnear=Schulgasse+8,+5620+Bremgarten,+Aargau&amp;t=h&amp;ll=47.351515,8.343794&amp;spn=0.003634,0.014784&amp;z=16&amp;iwloc=A&amp;output=embed"></iframe>
+          <div id='map_canvas'></div>
           <ul>
             <li>
               Michael Kessler
