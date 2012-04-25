@@ -11,7 +11,7 @@
   })();
 
   $(function() {
-    var animloop, earth, fps, map, marker, mkLatlng, oldtime;
+    var animloop, earth, map, marker, mkLatlng;
     mkLatlng = new google.maps.LatLng(47.352460, 8.341992);
     map = new google.maps.Map(document.getElementById('map_canvas'), {
       center: mkLatlng,
@@ -28,7 +28,10 @@
       controlsContainer: '#content',
       manualControls: 'header li a',
       pauseOnAction: true,
+      pauseOnHover: true,
       directionNav: true,
+      mousewheel: true,
+      slideshowSpeed: 30000,
       before: function(slider) {
         var menu;
         menu = $('header nav a').get(slider.currentSlide);
@@ -45,17 +48,10 @@
     $('abbr').mTip({
       align: 'top'
     });
-    earth = new World.Earth();
-    $(document).keypress(function(key) {
-      if (key.which === 97) return $('#fps').toggle();
-    });
-    oldtime = new Date().getTime();
-    fps = 0;
+    earth = new World.Earth(document.getElementById('world').getContext('2d'));
     animloop = function(time) {
       requestAnimFrame(animloop);
-      earth.move();
-      $('#fps').html("" + (Math.round(1000 / (time - oldtime))) + " FPS");
-      return oldtime = time;
+      return earth.animate();
     };
     return requestAnimFrame(animloop);
   });

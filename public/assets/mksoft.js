@@ -10963,6 +10963,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }  
 
 })(jQuery);
+
 /**
  * StyleFix 1.0.1
  * @author Lea Verou
@@ -11713,7 +11714,7 @@ for(var i=0; i<self.properties.length; i++) {
   })();
 
   $(function() {
-    var animloop, earth, fps, map, marker, mkLatlng, oldtime;
+    var animloop, earth, map, marker, mkLatlng;
     mkLatlng = new google.maps.LatLng(47.352460, 8.341992);
     map = new google.maps.Map(document.getElementById('map_canvas'), {
       center: mkLatlng,
@@ -11730,7 +11731,10 @@ for(var i=0; i<self.properties.length; i++) {
       controlsContainer: '#content',
       manualControls: 'header li a',
       pauseOnAction: true,
+      pauseOnHover: true,
       directionNav: true,
+      mousewheel: true,
+      slideshowSpeed: 30000,
       before: function(slider) {
         var menu;
         menu = $('header nav a').get(slider.currentSlide);
@@ -11747,17 +11751,10 @@ for(var i=0; i<self.properties.length; i++) {
     $('abbr').mTip({
       align: 'top'
     });
-    earth = new World.Earth();
-    $(document).keypress(function(key) {
-      if (key.which === 97) return $('#fps').toggle();
-    });
-    oldtime = new Date().getTime();
-    fps = 0;
+    earth = new World.Earth(document.getElementById('world').getContext('2d'));
     animloop = function(time) {
       requestAnimFrame(animloop);
-      earth.move();
-      $('#fps').html("" + (Math.round(1000 / (time - oldtime))) + " FPS");
-      return oldtime = time;
+      return earth.animate();
     };
     return requestAnimFrame(animloop);
   });
@@ -11789,25 +11786,29 @@ for(var i=0; i<self.properties.length; i++) {
 
   World.Earth = (function() {
 
-    function Earth() {
-      this.move = __bind(this.move, this);      this.sea = new World.Sea();
-      this.sky = new World.Sky();
-      this.el = $('<div>');
-      this.el.attr('id', 'earth');
-      this.el.css('position', 'fixed');
-      this.el.css('top', 0);
-      this.el.css('left', 0);
-      this.el.css('height', '100%');
-      this.el.css('width', '100%');
-      this.el.css('background-image', "" + PrefixFree.prefix + "linear-gradient(bottom, rgb(249,242,231) 0%, rgb(100,166,197) 100%)");
-      this.el.append(this.sea.el);
-      this.el.append(this.sky.el);
-      $('body').append(this.el);
+    Earth.name = 'Earth';
+
+    function Earth(context) {
+      this.context = context;
+      this.animate = __bind(this.animate, this);
+
+      this.size = __bind(this.size, this);
+
+      this.size();
+      this.sea = new World.Sea(this.context);
+      this.sky = new World.Sky(this.context);
+      $(window).bind('resize', this.size);
     }
 
-    Earth.prototype.move = function() {
-      this.sea.move();
-      return this.sky.move();
+    Earth.prototype.size = function() {
+      this.context.canvas.width = document.width;
+      return this.context.canvas.height = document.height;
+    };
+
+    Earth.prototype.animate = function() {
+      this.context.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
+      this.sea.animate();
+      return this.sky.animate();
     };
 
     return Earth;
@@ -11820,54 +11821,29 @@ for(var i=0; i<self.properties.length; i++) {
 
   World.Balloon = (function() {
 
-    Balloon.ballons = [
-      {
-        image: 'balloon_1.png',
-        width: 255,
-        height: 330
-      }, {
-        image: 'balloon_2.png',
-        width: 307,
-        height: 400
-      }, {
-        image: 'balloon_3.png',
-        width: 173,
-        height: 222
-      }, {
-        image: 'balloon_4.png',
-        width: 308,
-        height: 400
-      }
-    ];
+    Balloon.name = 'Balloon';
 
-    function Balloon(sky) {
+    function Balloon(context, sky) {
+      this.context = context;
       this.sky = sky;
-      this.el = $('<div>');
-      this.el.attr('id', 'balloon');
-      this.el.css('position', 'absolute');
       this.initialize();
     }
 
     Balloon.prototype.initialize = function() {
-      var balloon;
-      balloon = World.Balloon.ballons[Math.floor(Math.random() * 3) + 1];
-      this.el.css('background', "transparent url(images/" + balloon.image + ") left top no-repeat");
-      this.el.css('width', balloon.width);
-      this.el.css('height', balloon.height);
-      this.x = -1 * (this.el.width() + Math.floor(Math.random() * 2000));
-      this.y = Math.floor(Math.random() * (this.sky.height - this.el.height())) + 1;
+      this.image = new Image();
+      this.image.src = "images/balloon_" + (Math.floor(Math.random() * 3) + 1) + ".png";
+      this.x = -1 * (this.image.width + Math.floor(Math.random() * 2000));
+      this.y = Math.floor(Math.random() * (this.sky.height - this.image.height)) + 1;
       this.speed = -1 / this.sky.height * (this.y - this.sky.height);
-      this.el.css('top', this.y);
-      this.el.css('left', this.x);
-      return this.el.css('transform', "scale(" + (this.speed * 0.3) + ")");
+      return this.z = this.speed;
     };
 
-    Balloon.prototype.move = function() {
+    Balloon.prototype.animate = function() {
       this.x = this.x + this.speed;
-      this.el.css('left', this.x);
+      this.context.drawImage(this.image, this.x, this.y, this.image.width * this.speed * 0.3, this.image.height * this.speed * 0.3);
       if (this.sky.width < this.x) {
         this.initialize();
-        return this.x = -1 * (this.el.width() + Math.floor(Math.random() * 2000));
+        return this.x = -1 * (this.image.width + Math.floor(Math.random() * 2000));
       }
     };
 
@@ -11881,6 +11857,10 @@ for(var i=0; i<self.properties.length; i++) {
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   World.Sun = (function() {
+
+    Sun.name = 'Sun';
+
+    Sun.prototype.rays = [];
 
     Sun.rays = [
       {
@@ -11901,38 +11881,33 @@ for(var i=0; i<self.properties.length; i++) {
       }
     ];
 
-    function Sun(sky) {
-      var r, ray, _i, _len, _ref;
+    function Sun(context, sky) {
+      var ray, _i, _len, _ref;
+      this.context = context;
       this.sky = sky;
-      this.move = __bind(this.move, this);
-      this.el = $('<div>');
-      this.el.attr('id', 'sun');
-      this.el.css('position', 'absolute');
-      this.el.css('width', 250);
-      this.el.css('height', 250);
-      this.el.css('top', Math.floor(Math.random() * ((this.sky.height / 2) - this.el.height())) + 1);
-      this.el.css('left', Math.floor(Math.random() * (this.sky.width - this.el.height())) + 1);
-      this.size = (Math.floor(Math.random() * 30) + 40) / 100;
-      this.el.css('transform', "scale(" + this.size + ")");
-      this.rays = [];
+      this.animate = __bind(this.animate, this);
+
+      this.image = new Image();
+      this.image.src = 'images/sun.png';
+      this.size = (Math.floor(Math.random() * 30) + 40) / 100 * 250;
+      this.y = Math.floor(Math.random() * ((this.sky.height / 2) - this.size)) + 1;
+      this.x = Math.floor(Math.random() * (this.sky.width - this.size)) + 1;
+      this.z = -1000;
       _ref = World.Sun.rays;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         ray = _ref[_i];
-        r = new World.Ray(ray.speed, ray.rotate);
-        this.el.append(r.el);
-        this.rays.push(r);
+        this.rays.push(new World.Ray(this.context, this, ray.speed, ray.rotate));
       }
     }
 
-    Sun.prototype.move = function() {
-      var ray, _i, _len, _ref, _results;
+    Sun.prototype.animate = function() {
+      var ray, _i, _len, _ref;
       _ref = this.rays;
-      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         ray = _ref[_i];
-        _results.push(ray.move());
+        ray.animate();
       }
-      return _results;
+      return this.context.drawImage(this.image, this.x, this.y, this.size, this.size);
     };
 
     return Sun;
@@ -11946,26 +11921,32 @@ for(var i=0; i<self.properties.length; i++) {
 
   World.Ray = (function() {
 
-    function Ray(speed, rotate) {
+    Ray.name = 'Ray';
+
+    function Ray(context, sun, speed, rotate) {
+      this.context = context;
+      this.sun = sun;
       this.speed = speed;
       this.rotate = rotate;
-      this.move = __bind(this.move, this);
-      this.el = $('<div>');
-      this.el.addClass('ray');
-      this.el.css('background', 'transparent url(images/sun.png) left top no-repeat');
-      this.el.css('position', 'absolute');
-      this.el.css('width', 250);
-      this.el.css('height', 250);
-      this.el.css('top', 0);
-      this.el.css('left', 0);
-      this.el.css('transform', "rotate(" + this.rotate + "deg)");
+      this.animate = __bind(this.animate, this);
+
+      this.image = new Image();
+      this.image.src = 'images/sun.png';
     }
 
-    Ray.prototype.move = function() {
+    Ray.prototype.animate = function() {
       this.rotate = this.rotate + this.speed;
-      if (this.rotate > 360) this.rotate = 0;
-      if (this.rotate < 0) this.rotate = 360;
-      return this.el.css('transform', "rotate(" + this.rotate + "deg)");
+      if (this.rotate > 360) {
+        this.rotate = 0;
+      }
+      if (this.rotate < 0) {
+        this.rotate = 360;
+      }
+      this.context.save();
+      this.context.translate(this.sun.x + this.sun.size / 2, this.sun.y + this.sun.size / 2);
+      this.context.rotate(Trig.Util.deg2rad(this.rotate));
+      this.context.drawImage(this.image, -this.sun.size / 2, -this.sun.size / 2, this.sun.size, this.sun.size);
+      return this.context.restore();
     };
 
     return Ray;
@@ -11979,52 +11960,45 @@ for(var i=0; i<self.properties.length; i++) {
 
   World.Sea = (function() {
 
+    Sea.name = 'Sea';
+
     Sea.waves = 5;
 
-    function Sea() {
-      this.move = __bind(this.move, this);
-      this.update = __bind(this.update, this);
-      var pos, _ref;
+    Sea.prototype.waves = [];
+
+    function Sea(context) {
+      var pos, _i, _ref;
+      this.context = context;
+      this.animate = __bind(this.animate, this);
+
+      this.size = __bind(this.size, this);
+
       this.swell = Math.floor(Math.random() * 2) + 1;
-      this.el = $('<div>');
-      this.el.attr('id', 'sea');
-      this.el.css('position', 'absolute');
-      this.el.css('overflow', 'hidden');
-      this.el.css('bottom', 0);
-      this.el.css('left', 0);
-      $(window).bind('resize', this.update);
-      this.update();
-      this.waves = [];
-      for (pos = 1, _ref = World.Sea.waves; 1 <= _ref ? pos < _ref : pos > _ref; 1 <= _ref ? pos++ : pos--) {
-        this.waves.push(new World.Wave(this, pos));
+      $(window).bind('resize', this.size);
+      this.size();
+      for (pos = _i = 1, _ref = World.Sea.waves; 1 <= _ref ? _i < _ref : _i > _ref; pos = 1 <= _ref ? ++_i : --_i) {
+        this.waves.push(new World.Wave(this.context, this, pos));
       }
+      this.waves.sort(function(a, b) {
+        return a.z - b.z;
+      });
     }
 
-    Sea.prototype.update = function() {
-      var wave, _i, _len, _ref, _results;
+    Sea.prototype.size = function() {
       this.width = $(window).width();
       this.height = $(window).height() / 4;
-      if (this.height > 200) this.height = 200;
-      this.el.css('width', this.width);
-      this.el.css('height', this.height);
-      if (this.waves) {
-        _ref = this.waves;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          wave = _ref[_i];
-          _results.push(wave.el.css('width', this.width + 1000));
-        }
-        return _results;
+      if (this.height > 200) {
+        return this.height = 200;
       }
     };
 
-    Sea.prototype.move = function() {
+    Sea.prototype.animate = function() {
       var wave, _i, _len, _ref, _results;
       _ref = this.waves;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         wave = _ref[_i];
-        _results.push(wave.move());
+        _results.push(wave.animate());
       }
       return _results;
     };
@@ -12040,32 +12014,55 @@ for(var i=0; i<self.properties.length; i++) {
 
   World.Wave = (function() {
 
-    function Wave(sea, pos) {
+    Wave.name = 'Wave';
+
+    function Wave(context, sea, pos) {
+      var _this = this;
+      this.context = context;
       this.sea = sea;
       this.pos = pos;
-      this.move = __bind(this.move, this);
+      this.animate = __bind(this.animate, this);
+
+      this.size = __bind(this.size, this);
+
+      $(window).bind('resize', this.size);
+      this.size();
       this.x = -500 + Math.floor(Math.random() * 250) + 1;
-      this.y = this.pos * 20;
+      this.z = World.Sea.waves - this.pos;
       this.swellXDeg = Math.floor(Math.random() * 360) + 1;
       this.swellYDeg = Math.floor(Math.random() * 360) + 1;
-      this.el = $("<div>");
-      this.el.addClass('wave');
-      this.el.css('background', "transparent url(images/wave_" + this.sea.swell + ".png) left top repeat-x");
-      this.el.css('position', 'absolute');
-      this.el.css('opacity', 100 / (100 + (10 * (World.Sea.waves - this.pos))));
-      this.el.css('z-index', World.Sea.waves - this.pos);
-      this.el.css('height', 200);
-      this.el.css('width', this.sea.width + 1000);
-      this.sea.el.append(this.el);
+      this.image = new Image();
+      this.image.onload = function() {
+        return _this.pattern = _this.context.createPattern(_this.image, 'repeat-x');
+      };
+      this.image.src = "images/wave_" + this.sea.swell + ".png";
+      this.opacity = 100 / (100 + (10 * (World.Sea.waves - this.pos)));
     }
 
-    Wave.prototype.move = function() {
+    Wave.prototype.size = function() {
+      return this.y = document.height - this.sea.height + this.pos * 20;
+    };
+
+    Wave.prototype.animate = function() {
+      var x, y;
       this.swellXDeg = this.swellXDeg + this.sea.swell * 3;
-      if (this.swellXDeg > 360) this.swellXDeg = 0;
+      if (this.swellXDeg > 360) {
+        this.swellXDeg = 0;
+      }
       this.swellYDeg = this.swellYDeg + this.sea.swell * 3;
-      if (this.swellYDeg > 360) this.swellYDeg = 0;
-      this.el.css('left', this.x + Math.sin(Trig.Util.deg2rad(this.swellXDeg)) * 5 * this.sea.swell);
-      return this.el.css('top', this.y + Math.sin(Trig.Util.deg2rad(this.swellYDeg)) * 5 * this.sea.swell);
+      if (this.swellYDeg > 360) {
+        this.swellYDeg = 0;
+      }
+      if (this.pattern) {
+        x = this.x + Math.sin(Trig.Util.deg2rad(this.swellXDeg)) * 5 * this.sea.swell;
+        y = this.y + Math.sin(Trig.Util.deg2rad(this.swellYDeg)) * 5 * this.sea.swell;
+        this.context.save();
+        this.context.translate(x, y);
+        this.context.globalAlpha = this.opacity;
+        this.context.fillStyle = this.pattern;
+        this.context.fillRect(0, 0, this.context.canvas.width - this.x + 20, this.image.height);
+        return this.context.restore();
+      }
     };
 
     return Wave;
@@ -12079,54 +12076,52 @@ for(var i=0; i<self.properties.length; i++) {
 
   World.Sky = (function() {
 
-    function Sky() {
-      this.move = __bind(this.move, this);
-      this.update = __bind(this.update, this);
-      var pos;
-      this.el = $('<div>');
-      this.el.attr('id', 'sky');
-      this.el.css('position', 'absolute');
-      this.el.css('overflow-x', 'hidden');
-      this.el.css('overflow-y', 'visible');
-      this.el.css('top', 0);
-      this.el.css('left', 0);
-      $(window).bind('resize', this.update);
-      this.update();
-      this.clouds = [];
-      for (pos = 1; pos <= 20; pos++) {
-        this.clouds.push(new World.Cloud(this, pos));
+    Sky.name = 'Sky';
+
+    Sky.prototype.elements = [];
+
+    function Sky(context) {
+      var pos, _i;
+      this.context = context;
+      this.animate = __bind(this.animate, this);
+
+      this.position = __bind(this.position, this);
+
+      this.position();
+      for (pos = _i = 1; _i <= 20; pos = ++_i) {
+        this.elements.push(new World.Cloud(this.context, this));
       }
-      this.sun = new World.Sun(this);
-      this.el.append(this.sun.el);
-      this.ballon = new World.Balloon(this);
-      this.el.append(this.ballon.el);
+      this.elements.push(new World.Sun(this.context, this));
+      this.elements.push(new World.Balloon(this.context, this));
+      this.elements.sort(function(a, b) {
+        return a.z - b.z;
+      });
+      $(window).bind('resize', this.position);
     }
 
-    Sky.prototype.update = function() {
-      var cloud, oldHeight, _i, _len, _ref;
+    Sky.prototype.position = function() {
+      var e, oldHeight, _i, _len, _ref, _results;
       this.width = $(window).width();
       oldHeight = this.height;
       this.height = 2 * ($(window).height() / 3);
-      if (oldHeight && this.clouds) {
-        _ref = this.clouds;
+      if (oldHeight) {
+        _ref = this.elements;
+        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          cloud = _ref[_i];
-          cloud.y = cloud.y * (this.height / oldHeight);
+          e = _ref[_i];
+          _results.push(e.y = e.y * (this.height / oldHeight));
         }
+        return _results;
       }
-      this.el.css('width', this.width);
-      return this.el.css('height', this.height);
     };
 
-    Sky.prototype.move = function() {
-      var cloud, _i, _len, _ref, _results;
-      this.sun.move();
-      this.ballon.move();
-      _ref = this.clouds;
+    Sky.prototype.animate = function() {
+      var e, _i, _len, _ref, _results;
+      _ref = this.elements;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        cloud = _ref[_i];
-        _results.push(cloud.move());
+        e = _ref[_i];
+        _results.push(e.animate());
       }
       return _results;
     };
@@ -12142,82 +12137,27 @@ for(var i=0; i<self.properties.length; i++) {
 
   World.Cloud = (function() {
 
-    Cloud.clouds = [
-      {
-        file: 'cloud_1.png',
-        width: 500,
-        height: 131
-      }, {
-        file: 'cloud_2.png',
-        width: 450,
-        height: 171
-      }, {
-        file: 'cloud_3.png',
-        width: 317,
-        height: 164
-      }, {
-        file: 'cloud_4.png',
-        width: 305,
-        height: 97
-      }, {
-        file: 'cloud_5.png',
-        width: 457,
-        height: 103
-      }, {
-        file: 'cloud_6.png',
-        width: 500,
-        height: 179
-      }, {
-        file: 'cloud_7.png',
-        width: 512,
-        height: 178
-      }, {
-        file: 'cloud_8.png',
-        width: 322,
-        height: 68
-      }, {
-        file: 'cloud_9.png',
-        width: 500,
-        height: 172
-      }, {
-        file: 'cloud_10.png',
-        width: 235,
-        height: 103
-      }, {
-        file: 'cloud_11.png',
-        width: 303,
-        height: 60
-      }, {
-        file: 'cloud_12.png',
-        width: 500,
-        height: 138
-      }
-    ];
+    Cloud.name = 'Cloud';
 
-    function Cloud(sky, pos) {
+    function Cloud(context, sky) {
+      this.context = context;
       this.sky = sky;
-      this.pos = pos;
-      this.move = __bind(this.move, this);
-      this.nr = Math.floor(Math.random() * World.Cloud.clouds.length);
-      this.el = $('<div>');
-      this.el.addClass('cloud');
-      this.el.css('background', "transparent url(images/" + World.Cloud.clouds[this.nr].file + ") left bottom repeat-x");
-      this.el.css('position', 'absolute');
-      this.el.css('width', World.Cloud.clouds[this.nr].width);
-      this.el.css('height', World.Cloud.clouds[this.nr].height);
+      this.animate = __bind(this.animate, this);
+
+      this.image = new Image();
+      this.image.src = "images/cloud_" + (Math.floor(Math.random() * 12) + 1) + ".png";
       this.x = Math.floor(Math.random() * this.sky.width) + 1;
-      this.y = Math.floor(Math.random() * (this.sky.height - this.el.height())) + 1;
+      this.y = Math.floor(Math.random() * (this.sky.height - this.image.height)) + 1;
+      this.z = Math.floor(this.sky.height - this.y);
       this.speed = -1 / this.sky.height * (this.y - this.sky.height);
-      this.el.css('transform', "scale(" + this.speed + ")");
-      this.sky.el.append(this.el);
     }
 
-    Cloud.prototype.move = function() {
+    Cloud.prototype.animate = function() {
       this.x = this.x + this.speed;
-      if (this.sky.width < this.x) this.x = this.el.width() * -1;
-      this.el.css('z-index', Math.floor(this.sky.height - this.y));
-      this.el.css('top', this.y);
-      return this.el.css('left', this.x);
+      if (this.sky.width < this.x) {
+        this.x = this.image.width * -1;
+      }
+      return this.context.drawImage(this.image, this.x, this.y, this.image.width * this.speed, this.image.height * this.speed);
     };
 
     return Cloud;

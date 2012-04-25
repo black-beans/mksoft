@@ -1,34 +1,52 @@
+# A single wave in the sea
+#
 class World.Wave
 
   # Construct a wave
   #
-  constructor: (@sea, @pos) ->
+  # @param [CanvasRenderingContext2D] context the canvas context
+  # @param [World.Sea] sea the sea
+  # @param [Number] pos the wave position
+  #
+  constructor: (@context, @sea, @pos) ->
+    $(window).bind 'resize', @size
+    @size()
+
     @x = -500 + Math.floor(Math.random() * 250) + 1
-    @y = @pos * 20
+    @z = World.Sea.waves - @pos
 
     @swellXDeg = Math.floor(Math.random() * 360) + 1
     @swellYDeg = Math.floor(Math.random() * 360) + 1
 
-    @el = $("<div>")
-    @el.addClass 'wave'
+    @image = new Image()
+    @image.onload = => @pattern = @context.createPattern @image, 'repeat-x'
+    @image.src = "images/wave_#{ @sea.swell }.png"
 
-    @el.css 'background', "transparent url(images/wave_#{ @sea.swell }.png) left top repeat-x"
-    @el.css 'position', 'absolute'
-    @el.css 'opacity', 100 / (100 + (10 * (World.Sea.waves - @pos)))
-    @el.css 'z-index', World.Sea.waves - @pos
-    @el.css 'height', 200
-    @el.css 'width', @sea.width + 1000
+    @opacity = 100 / (100 + (10 * (World.Sea.waves - @pos)))
 
-    @sea.el.append @el
+  # Recalculate the wave position on resize.
+  #
+  size: =>
+    @y = document.height - @sea.height + @pos * 20
 
   # Move the wave
   #
-  move: =>
+  animate: =>
     @swellXDeg = @swellXDeg + @sea.swell * 3
     @swellXDeg = 0 if @swellXDeg > 360
 
     @swellYDeg = @swellYDeg + @sea.swell * 3
     @swellYDeg = 0 if @swellYDeg > 360
 
-    @el.css 'left', @x + Math.sin(Trig.Util.deg2rad(@swellXDeg)) * 5 * @sea.swell
-    @el.css 'top', @y + Math.sin(Trig.Util.deg2rad(@swellYDeg)) * 5 * @sea.swell
+    if @pattern
+      x = @x + Math.sin(Trig.Util.deg2rad(@swellXDeg)) * 5 * @sea.swell
+      y = @y + Math.sin(Trig.Util.deg2rad(@swellYDeg)) * 5 * @sea.swell
+
+      @context.save()
+      @context.translate x, y
+      @context.globalAlpha = @opacity
+
+      @context.fillStyle = @pattern
+      @context.fillRect 0, 0, @context.canvas.width - @x + 20, @image.height
+
+      @context.restore()

@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/* line 9, ../../src/styles/mksoft.scss */
+/* line 10, ../../src/styles/mksoft.scss */
 bode, html {
   height: 100%;
   width: 100%;
@@ -7,21 +7,25 @@ bode, html {
   padding: 0;
 }
 
-/* line 16, ../../src/styles/mksoft.scss */
+/* line 17, ../../src/styles/mksoft.scss */
 body {
+  background: -webkit-gradient(linear, 50% 100%, 50% 0%, color-stop(0%, #f9f2e7), color-stop(100%, #64a6c5));
+  background: -webkit-linear-gradient(bottom, #f9f2e7, #64a6c5);
+  background: -moz-linear-gradient(bottom, #f9f2e7, #64a6c5);
+  background: -o-linear-gradient(bottom, #f9f2e7, #64a6c5);
+  background: -ms-linear-gradient(bottom, #f9f2e7, #64a6c5);
+  background: linear-gradient(bottom, #f9f2e7, #64a6c5);
   margin: 0;
   padding: 0;
-  background-color: #f9f2e7;
-}
-/* line 22, ../../src/styles/mksoft.scss */
-body #earth {
-  min-height: 400px;
+  background-color: #64a6c5;
 }
 /* line 25, ../../src/styles/mksoft.scss */
-body #earth #sky {
-  min-height: 250px;
+body #world {
+  position: fixed;
+  top: 0;
+  left: 0;
 }
-/* line 30, ../../src/styles/mksoft.scss */
+/* line 31, ../../src/styles/mksoft.scss */
 body #fps {
   position: absolute;
   bottom: 0;
@@ -31,7 +35,7 @@ body #fps {
   z-index: 10000;
   display: none;
 }
-/* line 42, ../../src/styles/mksoft.scss */
+/* line 43, ../../src/styles/mksoft.scss */
 body #content {
   position: relative;
   margin: auto;
@@ -41,63 +45,62 @@ body #content {
   color: #fff;
   z-index: 1000;
 }
-/* line 53, ../../src/styles/mksoft.scss */
+/* line 54, ../../src/styles/mksoft.scss */
 body #content header {
   overflow: visible;
   text-shadow: 2px 2px 10px #000;
 }
-/* line 57, ../../src/styles/mksoft.scss */
+/* line 58, ../../src/styles/mksoft.scss */
 body #content header h1 {
   margin-top: 15px;
   font-size: 48px;
 }
-/* line 62, ../../src/styles/mksoft.scss */
+/* line 63, ../../src/styles/mksoft.scss */
 body #content header nav {
   height: 50px;
 }
-/* line 65, ../../src/styles/mksoft.scss */
+/* line 66, ../../src/styles/mksoft.scss */
 body #content header nav ul {
   list-style-type: none;
 }
-/* line 5, ../../../../.rvm/gems/ruby-1.9.3-p0/gems/compass-0.11.7/frameworks/compass/stylesheets/compass/typography/lists/_inline-list.scss */
+/* line 5, ../../../../.rvm/gems/ruby-1.9.3-p125-perf/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/typography/lists/_inline-list.scss */
 body #content header nav ul, body #content header nav ul li {
   margin: 0px;
   padding: 0px;
   display: inline;
 }
-/* line 68, ../../src/styles/mksoft.scss */
+/* line 69, ../../src/styles/mksoft.scss */
 body #content header nav ul li {
-  -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
-  -o-border-radius: 10px;
+  -moz-border-radius: 10px;
   -ms-border-radius: 10px;
-  -khtml-border-radius: 10px;
+  -o-border-radius: 10px;
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.3);
   padding: 10px;
   margin-right: 10px;
 }
-/* line 74, ../../src/styles/mksoft.scss */
+/* line 75, ../../src/styles/mksoft.scss */
 body #content header nav ul li a {
-  -moz-transform: rotate(10deg);
   -webkit-transform: rotate(10deg);
-  -o-transform: rotate(10deg);
+  -moz-transform: rotate(10deg);
   -ms-transform: rotate(10deg);
+  -o-transform: rotate(10deg);
   transform: rotate(10deg);
   font-size: 28px;
   color: #fff;
   text-decoration: none;
 }
-/* line 80, ../../src/styles/mksoft.scss */
+/* line 81, ../../src/styles/mksoft.scss */
 body #content header nav ul li a:hover, body #content header nav ul li a.active {
   color: #ff6f00;
 }
-/* line 89, ../../src/styles/mksoft.scss */
+/* line 90, ../../src/styles/mksoft.scss */
 body #content #pages {
   overflow: hidden;
   width: 950px;
 }
-/* line 94, ../../src/styles/mksoft.scss */
+/* line 95, ../../src/styles/mksoft.scss */
 body #content #pages .curly {
   float: left;
   font-family: "baltica-web-extra-condensed";
@@ -106,7 +109,7 @@ body #content #pages .curly {
   text-decoration: none;
   color: #fff;
 }
-/* line 104, ../../src/styles/mksoft.scss */
+/* line 105, ../../src/styles/mksoft.scss */
 body #content #pages .slides {
   float: left;
   overflow: scroll-x;
@@ -116,62 +119,59 @@ body #content #pages .slides {
   padding-left: 10px;
   text-shadow: 1px 1px 2px #000;
 }
-/* line 115, ../../src/styles/mksoft.scss */
+/* line 116, ../../src/styles/mksoft.scss */
 body #content #pages .slides li h2 {
   margin-top: 50px;
 }
-/* line 119, ../../src/styles/mksoft.scss */
+/* line 120, ../../src/styles/mksoft.scss */
 body #content #pages .slides li a {
   color: #3b7daf;
   text-shadow: 1px 1px 2px #fff;
   text-decoration: none;
 }
-/* line 124, ../../src/styles/mksoft.scss */
+/* line 125, ../../src/styles/mksoft.scss */
 body #content #pages .slides li a:hover {
   color: #ff6f00;
 }
-/* line 129, ../../src/styles/mksoft.scss */
+/* line 130, ../../src/styles/mksoft.scss */
 body #content #pages .slides li abbr {
-  -moz-border-radius: 15px;
   -webkit-border-radius: 15px;
-  -o-border-radius: 15px;
+  -moz-border-radius: 15px;
   -ms-border-radius: 15px;
-  -khtml-border-radius: 15px;
+  -o-border-radius: 15px;
   border-radius: 15px;
   background-color: rgba(0, 0, 0, 0.2);
   padding: 0 5px;
   cursor: help;
 }
-/* line 136, ../../src/styles/mksoft.scss */
+/* line 137, ../../src/styles/mksoft.scss */
 body #content #pages .slides li ul {
   list-style-type: none;
 }
-/* line 5, ../../../../.rvm/gems/ruby-1.9.3-p0/gems/compass-0.11.7/frameworks/compass/stylesheets/compass/typography/lists/_inline-list.scss */
+/* line 5, ../../../../.rvm/gems/ruby-1.9.3-p125-perf/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/typography/lists/_inline-list.scss */
 body #content #pages .slides li ul, body #content #pages .slides li ul li {
   margin: 0px;
   padding: 0px;
   display: inline;
 }
-/* line 139, ../../src/styles/mksoft.scss */
+/* line 140, ../../src/styles/mksoft.scss */
 body #content #pages .slides li ul li:after {
   content: "✱";
   padding: 0 10px;
 }
-/* line 144, ../../src/styles/mksoft.scss */
+/* line 145, ../../src/styles/mksoft.scss */
 body #content #pages .slides li ul li:last-child:after {
   content: "";
 }
-/* line 149, ../../src/styles/mksoft.scss */
+/* line 150, ../../src/styles/mksoft.scss */
 body #content #pages .slides li #map_holder {
-  -moz-border-radius: 15px;
   -webkit-border-radius: 15px;
-  -o-border-radius: 15px;
+  -moz-border-radius: 15px;
   -ms-border-radius: 15px;
-  -khtml-border-radius: 15px;
+  -o-border-radius: 15px;
   border-radius: 15px;
-  -moz-box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-  -o-box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   z-index: 5000;
   overflow: hidden;
@@ -179,12 +179,12 @@ body #content #pages .slides li #map_holder {
   height: 350px;
   margin: 45px 0 15px 0;
 }
-/* line 161, ../../src/styles/mksoft.scss */
+/* line 162, ../../src/styles/mksoft.scss */
 body #content #pages .slides li #map_canvas {
   width: 100%;
   height: 100%;
 }
-/* line 169, ../../src/styles/mksoft.scss */
+/* line 170, ../../src/styles/mksoft.scss */
 body #content .flex-control-nav, body #content .flex-direction-nav {
   display: none;
 }

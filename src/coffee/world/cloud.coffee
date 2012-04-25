@@ -1,49 +1,28 @@
+# Cloud image that moves over the sky
+#
 class World.Cloud
-
-  @clouds: [
-    { file: 'cloud_1.png', width: 500, height: 131 }
-    { file: 'cloud_2.png', width: 450, height: 171 }
-    { file: 'cloud_3.png', width: 317, height: 164 }
-    { file: 'cloud_4.png', width: 305, height: 97 }
-    { file: 'cloud_5.png', width: 457, height: 103 }
-    { file: 'cloud_6.png', width: 500, height: 179 }
-    { file: 'cloud_7.png', width: 512, height: 178 }
-    { file: 'cloud_8.png', width: 322, height: 68 }
-    { file: 'cloud_9.png', width: 500, height: 172 }
-    { file: 'cloud_10.png', width: 235, height: 103 }
-    { file: 'cloud_11.png', width: 303, height: 60 }
-    { file: 'cloud_12.png', width: 500, height: 138 }
-  ]
 
   # Construct a cloud
   #
-  constructor: (@sky, @pos) ->
-    @nr = Math.floor(Math.random() * World.Cloud.clouds.length)
-
-    @el = $('<div>')
-    @el.addClass 'cloud'
-
-    @el.css 'background', "transparent url(images/#{ World.Cloud.clouds[@nr].file }) left bottom repeat-x"
-    @el.css 'position', 'absolute'
-    @el.css 'width', World.Cloud.clouds[@nr].width
-    @el.css 'height', World.Cloud.clouds[@nr].height
+  # @param [CanvasRenderingContext2D] context the canvas context
+  # @param [World.Sky] sky the world sky
+  #
+  constructor: (@context, @sky) ->
+    @image = new Image()
+    @image.src = "images/cloud_#{ Math.floor(Math.random() * 12) + 1 }.png"
 
     @x = Math.floor(Math.random() * @sky.width) + 1
-    @y = Math.floor(Math.random() * (@sky.height - @el.height())) + 1
+    @y = Math.floor(Math.random() * (@sky.height - @image.height)) + 1
+    @z = Math.floor(@sky.height - @y)
+
     @speed = -1 / @sky.height * (@y - @sky.height)
 
-    @el.css 'transform', "scale(#{ @speed })"
-
-    @sky.el.append @el
-
-  # Move the cloud
+  # Animate the cloud
   #
-  move: =>
+  animate: =>
     @x = @x + @speed
 
     if @sky.width < @x
-      @x = @el.width() * -1
+      @x = @image.width * -1
 
-    @el.css 'z-index', Math.floor(@sky.height - @y)
-    @el.css 'top', @y
-    @el.css 'left', @x
+    @context.drawImage @image, @x, @y, @image.width * @speed, @image.height * @speed

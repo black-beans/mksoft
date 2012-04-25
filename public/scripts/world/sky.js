@@ -3,54 +3,52 @@
 
   World.Sky = (function() {
 
-    function Sky() {
-      this.move = __bind(this.move, this);
-      this.update = __bind(this.update, this);
-      var pos;
-      this.el = $('<div>');
-      this.el.attr('id', 'sky');
-      this.el.css('position', 'absolute');
-      this.el.css('overflow-x', 'hidden');
-      this.el.css('overflow-y', 'visible');
-      this.el.css('top', 0);
-      this.el.css('left', 0);
-      $(window).bind('resize', this.update);
-      this.update();
-      this.clouds = [];
-      for (pos = 1; pos <= 20; pos++) {
-        this.clouds.push(new World.Cloud(this, pos));
+    Sky.name = 'Sky';
+
+    Sky.prototype.elements = [];
+
+    function Sky(context) {
+      var pos, _i;
+      this.context = context;
+      this.animate = __bind(this.animate, this);
+
+      this.position = __bind(this.position, this);
+
+      this.position();
+      for (pos = _i = 1; _i <= 20; pos = ++_i) {
+        this.elements.push(new World.Cloud(this.context, this));
       }
-      this.sun = new World.Sun(this);
-      this.el.append(this.sun.el);
-      this.ballon = new World.Balloon(this);
-      this.el.append(this.ballon.el);
+      this.elements.push(new World.Sun(this.context, this));
+      this.elements.push(new World.Balloon(this.context, this));
+      this.elements.sort(function(a, b) {
+        return a.z - b.z;
+      });
+      $(window).bind('resize', this.position);
     }
 
-    Sky.prototype.update = function() {
-      var cloud, oldHeight, _i, _len, _ref;
+    Sky.prototype.position = function() {
+      var e, oldHeight, _i, _len, _ref, _results;
       this.width = $(window).width();
       oldHeight = this.height;
       this.height = 2 * ($(window).height() / 3);
-      if (oldHeight && this.clouds) {
-        _ref = this.clouds;
+      if (oldHeight) {
+        _ref = this.elements;
+        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          cloud = _ref[_i];
-          cloud.y = cloud.y * (this.height / oldHeight);
+          e = _ref[_i];
+          _results.push(e.y = e.y * (this.height / oldHeight));
         }
+        return _results;
       }
-      this.el.css('width', this.width);
-      return this.el.css('height', this.height);
     };
 
-    Sky.prototype.move = function() {
-      var cloud, _i, _len, _ref, _results;
-      this.sun.move();
-      this.ballon.move();
-      _ref = this.clouds;
+    Sky.prototype.animate = function() {
+      var e, _i, _len, _ref, _results;
+      _ref = this.elements;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        cloud = _ref[_i];
-        _results.push(cloud.move());
+        e = _ref[_i];
+        _results.push(e.animate());
       }
       return _results;
     };

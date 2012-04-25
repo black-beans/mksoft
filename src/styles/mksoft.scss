@@ -5,6 +5,7 @@ $teal_drop     : rgb(64, 192, 203);
 $whitetrash    : rgb(249, 242, 231);
 $atomic_bikini : rgb(174, 226, 57);
 $feeble_week   : rgb(143, 190, 0);
+$fountain_blue : rgb(100, 166, 197);
 
 bode, html {
   height: 100%;
@@ -14,17 +15,17 @@ bode, html {
 }
 
 body {
+  @include background(linear-gradient(bottom, $whitetrash, $fountain_blue));
+
   margin: 0;
   padding: 0;
 
-  background-color: $whitetrash;
+  background-color: $fountain_blue;
 
-  #earth {
-    min-height: 400px;
-
-    #sky {
-      min-height: 250px;
-    }
+  #world {
+    position: fixed;
+    top: 0;
+    left: 0;
   }
 
   #fps {

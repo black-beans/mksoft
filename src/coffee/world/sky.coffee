@@ -1,48 +1,40 @@
+# The sky is the upper part of the earth and contains different
+# elements like clouds, the sun and a balloon.
+#
 class World.Sky
+
+  elements: []
 
   # Construct the sky
   #
-  constructor: ->
-    @el = $('<div>')
-    @el.attr 'id', 'sky'
-
-    @el.css 'position', 'absolute'
-    @el.css 'overflow-x', 'hidden'
-    @el.css 'overflow-y', 'visible'
-    @el.css 'top', 0
-    @el.css 'left', 0
-
-    $(window).bind 'resize', @update
-    @update()
-
-    @clouds = []
-    @clouds.push(new World.Cloud(@, pos)) for pos in [1..20]
-
-    @sun = new World.Sun(@)
-    @el.append @sun.el
-
-    @ballon = new World.Balloon(@)
-    @el.append @ballon.el
-
-  # Calculate the new sky size
+  # @param [CanvasRenderingContext2D] context the canvas context
   #
-  update: =>
+  constructor: (@context) ->
+    @position()
+
+    @elements.push(new World.Cloud(@context, @)) for pos in [1..20]
+    @elements.push new World.Sun(@context, @)
+    @elements.push new World.Balloon(@context, @)
+
+    @elements.sort (a, b) -> a.z - b.z
+
+    $(window).bind 'resize', @position
+
+  # Calculate the new sky size and re-position
+  # the containing elements
+  #
+  position: =>
     @width  = $(window).width()
 
     oldHeight = @height
     @height = 2 * ($(window).height() / 3)
 
-    # Adjust cloud position on resize
-    if oldHeight && @clouds
-      for cloud in @clouds
-        cloud.y = cloud.y * (@height / oldHeight)
+    # Adjust element position on resize
+    if oldHeight
+      for e in @elements
+        e.y = e.y * (@height / oldHeight)
 
-    @el.css 'width', @width
-    @el.css 'height', @height
-
-  # Move the sky
+  # Animate the sky
   #
-  move: =>
-    @sun.move()
-    @ballon.move()
-    cloud.move() for cloud in @clouds
+  animate: =>
+    e.animate() for e in @elements

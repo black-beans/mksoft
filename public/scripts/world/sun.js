@@ -3,6 +3,10 @@
 
   World.Sun = (function() {
 
+    Sun.name = 'Sun';
+
+    Sun.prototype.rays = [];
+
     Sun.rays = [
       {
         speed: -0.5,
@@ -22,38 +26,33 @@
       }
     ];
 
-    function Sun(sky) {
-      var r, ray, _i, _len, _ref;
+    function Sun(context, sky) {
+      var ray, _i, _len, _ref;
+      this.context = context;
       this.sky = sky;
-      this.move = __bind(this.move, this);
-      this.el = $('<div>');
-      this.el.attr('id', 'sun');
-      this.el.css('position', 'absolute');
-      this.el.css('width', 250);
-      this.el.css('height', 250);
-      this.el.css('top', Math.floor(Math.random() * ((this.sky.height / 2) - this.el.height())) + 1);
-      this.el.css('left', Math.floor(Math.random() * (this.sky.width - this.el.height())) + 1);
-      this.size = (Math.floor(Math.random() * 30) + 40) / 100;
-      this.el.css('transform', "scale(" + this.size + ")");
-      this.rays = [];
+      this.animate = __bind(this.animate, this);
+
+      this.image = new Image();
+      this.image.src = 'images/sun.png';
+      this.size = (Math.floor(Math.random() * 30) + 40) / 100 * 250;
+      this.y = Math.floor(Math.random() * ((this.sky.height / 2) - this.size)) + 1;
+      this.x = Math.floor(Math.random() * (this.sky.width - this.size)) + 1;
+      this.z = -1000;
       _ref = World.Sun.rays;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         ray = _ref[_i];
-        r = new World.Ray(ray.speed, ray.rotate);
-        this.el.append(r.el);
-        this.rays.push(r);
+        this.rays.push(new World.Ray(this.context, this, ray.speed, ray.rotate));
       }
     }
 
-    Sun.prototype.move = function() {
-      var ray, _i, _len, _ref, _results;
+    Sun.prototype.animate = function() {
+      var ray, _i, _len, _ref;
       _ref = this.rays;
-      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         ray = _ref[_i];
-        _results.push(ray.move());
+        ray.animate();
       }
-      return _results;
+      return this.context.drawImage(this.image, this.x, this.y, this.size, this.size);
     };
 
     return Sun;

@@ -32,7 +32,10 @@ $(->
     controlsContainer: '#content'
     manualControls: 'header li a'
     pauseOnAction: true
+    pauseOnHover: true
     directionNav: true
+    mousewheel: true
+    slideshowSpeed: 30000
     before: (slider) ->
       menu = $('header nav a').get(slider.currentSlide)
       $(menu).removeClass 'active'
@@ -45,19 +48,11 @@ $(->
   $('abbr').mTip
     align: 'top'
 
-  earth = new World.Earth()
-
-  $(document).keypress (key) -> $('#fps').toggle() if key.which is 97
-  oldtime = new Date().getTime()
-  fps = 0
+  earth = new World.Earth(document.getElementById('world').getContext('2d'))
 
   animloop = (time) ->
     requestAnimFrame animloop
-
-    earth.move()
-
-    $('#fps').html("#{ Math.round(1000 / (time - oldtime)) } FPS")
-    oldtime = time
+    earth.animate()
 
   requestAnimFrame animloop
 )

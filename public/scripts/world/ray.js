@@ -3,26 +3,32 @@
 
   World.Ray = (function() {
 
-    function Ray(speed, rotate) {
+    Ray.name = 'Ray';
+
+    function Ray(context, sun, speed, rotate) {
+      this.context = context;
+      this.sun = sun;
       this.speed = speed;
       this.rotate = rotate;
-      this.move = __bind(this.move, this);
-      this.el = $('<div>');
-      this.el.addClass('ray');
-      this.el.css('background', 'transparent url(images/sun.png) left top no-repeat');
-      this.el.css('position', 'absolute');
-      this.el.css('width', 250);
-      this.el.css('height', 250);
-      this.el.css('top', 0);
-      this.el.css('left', 0);
-      this.el.css('transform', "rotate(" + this.rotate + "deg)");
+      this.animate = __bind(this.animate, this);
+
+      this.image = new Image();
+      this.image.src = 'images/sun.png';
     }
 
-    Ray.prototype.move = function() {
+    Ray.prototype.animate = function() {
       this.rotate = this.rotate + this.speed;
-      if (this.rotate > 360) this.rotate = 0;
-      if (this.rotate < 0) this.rotate = 360;
-      return this.el.css('transform', "rotate(" + this.rotate + "deg)");
+      if (this.rotate > 360) {
+        this.rotate = 0;
+      }
+      if (this.rotate < 0) {
+        this.rotate = 360;
+      }
+      this.context.save();
+      this.context.translate(this.sun.x + this.sun.size / 2, this.sun.y + this.sun.size / 2);
+      this.context.rotate(Trig.Util.deg2rad(this.rotate));
+      this.context.drawImage(this.image, -this.sun.size / 2, -this.sun.size / 2, this.sun.size, this.sun.size);
+      return this.context.restore();
     };
 
     return Ray;
