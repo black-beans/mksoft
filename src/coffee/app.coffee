@@ -48,12 +48,20 @@ $(->
   $('abbr').mTip
     align: 'top'
 
-  earth = new World.Earth(document.getElementById('world').getContext('2d'))
+  canvas = document.getElementById('world')
 
-  animloop = (time) ->
+  if canvas.getContext
+    earth = new World.Earth(canvas.getContext('2d'))
+
+    animloop = (time) ->
+      requestAnimFrame animloop
+      earth.animate()
+
     requestAnimFrame animloop
-    earth.animate()
 
-  requestAnimFrame animloop
+  # static fallback
+  else
+    $('body').css('background-image', 'url("images/background.jpg");')
+    $('body').css('background-size', 'cover')
 )
 

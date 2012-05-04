@@ -11,7 +11,7 @@
   })();
 
   $(function() {
-    var animloop, earth, map, marker, mkLatlng;
+    var animloop, canvas, earth, map, marker, mkLatlng;
     mkLatlng = new google.maps.LatLng(47.352460, 8.341992);
     map = new google.maps.Map(document.getElementById('map_canvas'), {
       center: mkLatlng,
@@ -48,12 +48,18 @@
     $('abbr').mTip({
       align: 'top'
     });
-    earth = new World.Earth(document.getElementById('world').getContext('2d'));
-    animloop = function(time) {
-      requestAnimFrame(animloop);
-      return earth.animate();
-    };
-    return requestAnimFrame(animloop);
+    canvas = document.getElementById('world');
+    if (canvas.getContext) {
+      earth = new World.Earth(canvas.getContext('2d'));
+      animloop = function(time) {
+        requestAnimFrame(animloop);
+        return earth.animate();
+      };
+      return requestAnimFrame(animloop);
+    } else {
+      $('body').css('background-image', 'url("images/background.jpg");');
+      return $('body').css('background-size', 'cover');
+    }
   });
 
 }).call(this);

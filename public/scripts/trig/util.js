@@ -2,6 +2,8 @@
 
   Trig.Util = (function() {
 
+    Util.name = 'Util';
+
     function Util() {}
 
     Util.rad2deg = function(rad) {
