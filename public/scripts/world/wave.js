@@ -29,7 +29,7 @@
     }
 
     Wave.prototype.size = function() {
-      return this.y = document.height - this.sea.height + this.pos * 20;
+      return this.y = $(document).height() - this.sea.height + this.pos * 20;
     };
 
     Wave.prototype.animate = function() {

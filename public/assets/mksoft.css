@@ -168,10 +168,8 @@ body #world {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
 }
-/* line 33, ../../src/styles/mksoft.scss */
+/* line 31, ../../src/styles/mksoft.scss */
 body #fps {
   position: absolute;
   bottom: 0;
@@ -181,7 +179,7 @@ body #fps {
   z-index: 10000;
   display: none;
 }
-/* line 45, ../../src/styles/mksoft.scss */
+/* line 43, ../../src/styles/mksoft.scss */
 body #content {
   position: relative;
   margin: auto;
@@ -191,21 +189,21 @@ body #content {
   color: #fff;
   z-index: 1000;
 }
-/* line 56, ../../src/styles/mksoft.scss */
+/* line 54, ../../src/styles/mksoft.scss */
 body #content header {
   overflow: visible;
   text-shadow: 2px 2px 10px #000;
 }
-/* line 60, ../../src/styles/mksoft.scss */
+/* line 58, ../../src/styles/mksoft.scss */
 body #content header h1 {
   margin-top: 15px;
   font-size: 48px;
 }
-/* line 65, ../../src/styles/mksoft.scss */
+/* line 63, ../../src/styles/mksoft.scss */
 body #content header nav {
   height: 50px;
 }
-/* line 68, ../../src/styles/mksoft.scss */
+/* line 66, ../../src/styles/mksoft.scss */
 body #content header nav ul {
   list-style-type: none;
 }
@@ -215,7 +213,7 @@ body #content header nav ul, body #content header nav ul li {
   padding: 0px;
   display: inline;
 }
-/* line 71, ../../src/styles/mksoft.scss */
+/* line 69, ../../src/styles/mksoft.scss */
 body #content header nav ul li {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -226,22 +224,22 @@ body #content header nav ul li {
   padding: 10px;
   margin-right: 10px;
 }
-/* line 77, ../../src/styles/mksoft.scss */
+/* line 75, ../../src/styles/mksoft.scss */
 body #content header nav ul li a {
   font-size: 28px;
   color: #fff;
   text-decoration: none;
 }
-/* line 82, ../../src/styles/mksoft.scss */
+/* line 80, ../../src/styles/mksoft.scss */
 body #content header nav ul li a:hover, body #content header nav ul li a.active {
   color: #ff6f00;
 }
-/* line 91, ../../src/styles/mksoft.scss */
+/* line 89, ../../src/styles/mksoft.scss */
 body #content #pages {
   overflow: hidden;
   width: 950px;
 }
-/* line 96, ../../src/styles/mksoft.scss */
+/* line 94, ../../src/styles/mksoft.scss */
 body #content #pages .curly {
   float: left;
   font-family: "baltica-web-extra-condensed";
@@ -250,7 +248,7 @@ body #content #pages .curly {
   text-decoration: none;
   color: #fff;
 }
-/* line 106, ../../src/styles/mksoft.scss */
+/* line 104, ../../src/styles/mksoft.scss */
 body #content #pages .slides {
   float: left;
   overflow: scroll-x;
@@ -260,21 +258,21 @@ body #content #pages .slides {
   padding-left: 10px;
   text-shadow: 1px 1px 2px #000;
 }
-/* line 117, ../../src/styles/mksoft.scss */
+/* line 115, ../../src/styles/mksoft.scss */
 body #content #pages .slides li h2 {
   margin-top: 50px;
 }
-/* line 121, ../../src/styles/mksoft.scss */
+/* line 119, ../../src/styles/mksoft.scss */
 body #content #pages .slides li a {
   color: #3b7daf;
   text-shadow: 1px 1px 2px #fff;
   text-decoration: none;
 }
-/* line 126, ../../src/styles/mksoft.scss */
+/* line 124, ../../src/styles/mksoft.scss */
 body #content #pages .slides li a:hover {
   color: #ff6f00;
 }
-/* line 131, ../../src/styles/mksoft.scss */
+/* line 129, ../../src/styles/mksoft.scss */
 body #content #pages .slides li abbr {
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
@@ -285,7 +283,7 @@ body #content #pages .slides li abbr {
   padding: 0 5px;
   cursor: help;
 }
-/* line 138, ../../src/styles/mksoft.scss */
+/* line 136, ../../src/styles/mksoft.scss */
 body #content #pages .slides li ul {
   list-style-type: none;
 }
@@ -295,16 +293,16 @@ body #content #pages .slides li ul, body #content #pages .slides li ul li {
   padding: 0px;
   display: inline;
 }
-/* line 141, ../../src/styles/mksoft.scss */
+/* line 139, ../../src/styles/mksoft.scss */
 body #content #pages .slides li ul li:after {
   content: "✱";
   padding: 0 10px;
 }
-/* line 146, ../../src/styles/mksoft.scss */
+/* line 144, ../../src/styles/mksoft.scss */
 body #content #pages .slides li ul li:last-child:after {
   content: "";
 }
-/* line 151, ../../src/styles/mksoft.scss */
+/* line 149, ../../src/styles/mksoft.scss */
 body #content #pages .slides li #map_holder {
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
@@ -320,12 +318,12 @@ body #content #pages .slides li #map_holder {
   height: 350px;
   margin: 45px 0 15px 0;
 }
-/* line 163, ../../src/styles/mksoft.scss */
+/* line 161, ../../src/styles/mksoft.scss */
 body #content #pages .slides li #map_canvas {
   width: 100%;
   height: 100%;
 }
-/* line 171, ../../src/styles/mksoft.scss */
+/* line 169, ../../src/styles/mksoft.scss */
 body #content .flex-control-nav, body #content .flex-direction-nav {
   display: none;
 }

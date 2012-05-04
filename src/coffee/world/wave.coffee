@@ -27,7 +27,7 @@ class World.Wave
   # Recalculate the wave position on resize.
   #
   size: =>
-    @y = document.height - @sea.height + @pos * 20
+    @y = $(document).height() - @sea.height + @pos * 20
 
   # Move the wave
   #

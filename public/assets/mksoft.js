@@ -11809,8 +11809,8 @@ for(var i=0; i<self.properties.length; i++) {
     }
 
     Earth.prototype.size = function() {
-      this.context.canvas.width = document.width;
-      return this.context.canvas.height = document.height;
+      this.context.canvas.width = $(document).width();
+      return this.context.canvas.height = $(document).height();
     };
 
     Earth.prototype.animate = function() {
@@ -12048,7 +12048,7 @@ for(var i=0; i<self.properties.length; i++) {
     }
 
     Wave.prototype.size = function() {
-      return this.y = document.height - this.sea.height + this.pos * 20;
+      return this.y = $(document).height() - this.sea.height + this.pos * 20;
     };
 
     Wave.prototype.animate = function() {

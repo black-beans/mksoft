@@ -18,8 +18,8 @@ class World.Earth
   # Set the size of the world depending on the browser window
   #
   size: =>
-    @context.canvas.width = document.width
-    @context.canvas.height = document.height
+    @context.canvas.width = $(document).width()
+    @context.canvas.height = $(document).height()
 
   # Animate the world elements
   #

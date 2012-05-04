@@ -18,8 +18,8 @@
     }
 
     Earth.prototype.size = function() {
-      this.context.canvas.width = document.width;
-      return this.context.canvas.height = document.height;
+      this.context.canvas.width = $(document).width();
+      return this.context.canvas.height = $(document).height();
     };
 
     Earth.prototype.animate = function() {
